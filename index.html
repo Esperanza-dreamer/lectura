@@ -599,34 +599,46 @@
   }
 
   // ============================================================
-  // MyMemory API 查词函数（免费，无需密钥，支持西-英）
+  // MyMemory API 查词函数（使用你提供的 API Key）
   // ============================================================
   async function lookupWordOnGlosbe(word) {
     if (glossCache[word]) return glossCache[word];
     
-    const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(word)}&langpair=es|en`;
+    // 使用你的 API Key
+    const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(word)}&langpair=es|en&key=sm_yZ-Yl1gNikmbEE41wE36qYeLUj1EpDUf7kgT6B0uC0kn3a1tosbRq8eUSJsfRz4H11FpN9wKfYMiGP6OUEvr48mVGq2KdY3uuA`;
     
     try {
       const response = await fetch(url);
       const data = await response.json();
       
-      if (data && data.matches && data.matches.length > 0) {
-        // 过滤掉低质量的匹配（得分低的）
-        const translations = data.matches
-          .filter(match => match.score >= 0.5 && match.translation)
-          .map(match => match.translation.trim())
-          .filter((v, i, a) => a.indexOf(v) === i)
-          .slice(0, 5);
+      if (data && data.responseData && data.responseData.translatedText) {
+        let translatedText = data.responseData.translatedText;
         
-        if (translations.length > 0) {
-          glossCache[word] = translations;
-          return translations;
+        if (translatedText && translatedText !== word && !translatedText.includes('???')) {
+          let translations = translatedText
+            .split(/[,;]/)
+            .map(t => t.trim())
+            .filter(t => t && t.length > 0 && t.length < 50)
+            .slice(0, 5);
+          
+          if (translations.length === 1 && translations[0].includes(' ')) {
+            translations = [translations[0]];
+          }
+          
+          if (translations.length > 0) {
+            glossCache[word] = translations;
+            console.log(`✅ 查词成功: ${word} → ${translations.join(', ')}`);
+            return translations;
+          }
         }
       }
+      
+      console.log(`⚠️ 未找到翻译: ${word}`);
       glossCache[word] = [];
       return [];
+      
     } catch (error) {
-      console.error("MyMemory查词失败:", error);
+      console.error(`❌ MyMemory查词失败 (${word}):`, error);
       return [];
     }
   }
