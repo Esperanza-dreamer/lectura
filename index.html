@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, maximum-scale=1.5">
-  <title>Lectura de Espe</title>
+  <title>Lectura de Espe </title>
   <style>
     * {
       margin: 0;
@@ -348,6 +348,7 @@
 <script>
   // ============================================================
   // 静态作品数据（完整保留：博尔赫斯、聂鲁达、洛尔迦、帕斯）
+  // 帕斯作品：《La calle / 街道》（完整版）
   // ============================================================
   const STATIC_NOVEL_DATA = {
     "瞬息 / El instante": {
@@ -383,7 +384,20 @@
       type: "诗歌",
       chapters: [{ title: "Poema XX", paragraphs: [
         { sentences: [{ spanish: "Puedo escribir los versos más tristes esta noche.", chinese: "今夜我可以写出最哀伤的诗句。" },{ spanish: "Escribir, por ejemplo: 'La noche está estrellada,", chinese: "写，譬如说，'夜缀满繁星，" },{ spanish: "y tiritan, azules, los astros, a lo lejos'.", chinese: "星星在远方，湛蓝地颤抖。'" }] },
-        { sentences: [{ spanish: "El viento de la noche gira en el cielo y canta.", chinese: "夜风在天空里打转并歌唱。" },{ spanish: "Puedo escribir los versos más tristes esta noche.", chinese: "今夜我可以写出最哀伤的诗句。" }] }
+        { sentences: [{ spanish: "El viento de la noche gira en el cielo y canta.", chinese: "夜风在天空里打转并歌唱。" },{ spanish: "Puedo escribir los versos más tristes esta noche.", chinese: "今夜我可以写出最哀伤的诗句。" }] },
+        { sentences: [{ spanish: "Yo la quise, y a veces ella también me quiso.", chinese: "我爱过她，有时她也爱过我。" },{ spanish: "En las noches como ésta la tuve entre mis brazos.", chinese: "多少个像今晚的夜里，我将她拥入怀中。" }] },
+        { sentences: [{ spanish: "La besé tantas veces bajo el cielo infinito.", chinese: "在无垠的天空下，我吻过她无数次。" },{ spanish: "Ella me quiso, a veces yo también la quería.", chinese: "她爱过我，有时我也爱过她。" }] },
+        { sentences: [{ spanish: "Cómo no haber amado sus grandes ojos fijos.", chinese: "怎么会不爱上她凝视的深邃眼眸。" },{ spanish: "Puedo escribir los versos más tristes esta noche.", chinese: "今夜我可以写出最哀伤的诗句。" }] },
+        { sentences: [{ spanish: "Pensar que no la tengo. Sentir que la he perdido.", chinese: "想到我已失去她，感到我已失去她。" },{ spanish: "Oír la noche inmensa, más inmensa sin ella.", chinese: "聆听广阔的夜，因没有她而更加广阔。" }] },
+        { sentences: [{ spanish: "Y el verso cae al alma como al pasto el rocío.", chinese: "诗句滴落灵魂，如同露水落在草上。" },{ spanish: "Qué importa que mi amor no pudiera guardarla.", chinese: "我的爱不能留住她又有何妨。" }] },
+        { sentences: [{ spanish: "La noche está estrellada y ella no está conmigo.", chinese: "夜空缀满繁星，而她不在我身旁。" },{ spanish: "Eso es todo. A lo lejos alguien canta. A lo lejos.", chinese: "就这样。远处有人在唱歌。在远处。" }] },
+        { sentences: [{ spanish: "Mi alma no se contenta con haberla perdido.", chinese: "我的灵魂不甘于就此失去她。" },{ spanish: "Como para acercarla mi mirada la busca.", chinese: "我的视线追寻她，仿佛要靠近她。" }] },
+        { sentences: [{ spanish: "Mi corazón la busca, y ella no está conmigo.", chinese: "我的心在寻她，而她不在我身旁。" },{ spanish: "La misma noche que hace blanquear los mismos árboles.", chinese: "同样的夜，漂白了同样的树林。" }] },
+        { sentences: [{ spanish: "Nosotros, los de entonces, ya no somos los mismos.", chinese: "我们，当时的我们，已不再是同样的我们。" },{ spanish: "Ya no la quiero, es cierto, pero cuánto la quise.", chinese: "我已不爱她，这是确定的，但我曾多么爱她。" }] },
+        { sentences: [{ spanish: "Mi voz buscaba el viento para tocar su oído.", chinese: "我的声音曾寻找风，以触到她耳畔。" },{ spanish: "De otro. Será de otro. Como antes de mis besos.", chinese: "别人的。她将属于别人。如同属于我亲吻之前。" }] },
+        { sentences: [{ spanish: "Su voz, su cuerpo claro. Sus ojos infinitos.", chinese: "她的声音，她清澈的身体。她深邃的眼睛。" },{ spanish: "Ya no la quiero, es cierto, pero tal vez la quiero.", chinese: "我已不爱她，这是确定的，但也许我还爱她。" }] },
+        { sentences: [{ spanish: "Es tan corto el amor, y es tan largo el olvido.", chinese: "爱情如此短暂，而遗忘如此漫长。" },{ spanish: "Porque en noches como ésta la tuve entre mis brazos,", chinese: "因为多少个像今晚的夜里，我将她拥入怀中，" },{ spanish: "mi alma no se contenta con haberla perdido.", chinese: "我的灵魂不甘于就此失去她。" }] },
+        { sentences: [{ spanish: "Aunque éste sea el último dolor que ella me causa,", chinese: "即便这是她带给我的最后的痛苦，" },{ spanish: "y éstos sean los últimos versos que yo le escribo.", chinese: "即便这是我写给她的最后的诗句。" }] }
       ] }]
     },
     "La Guitarra": {
@@ -391,79 +405,36 @@
       type: "诗歌",
       chapters: [{ title: "La Guitarra", paragraphs: [
         { sentences: [{ spanish: "Empieza el llanto", chinese: "开始哭泣" },{ spanish: "de la guitarra.", chinese: "吉他的哭泣。" }] },
-        { sentences: [{ spanish: "Se rompen las copas", chinese: "黎明的酒杯" },{ spanish: "de la madrugada.", chinese: "碎裂。" }] }
+        { sentences: [{ spanish: "Se rompen las copas", chinese: "黎明的酒杯" },{ spanish: "de la madrugada.", chinese: "碎裂。" }] },
+        { sentences: [{ spanish: "Empieza el llanto", chinese: "开始哭泣" },{ spanish: "de la guitarra.", chinese: "吉他的哭泣。" }] },
+        { sentences: [{ spanish: "Es inútil", chinese: "无用" },{ spanish: "callarla.", chinese: "让它沉默。" }] },
+        { sentences: [{ spanish: "Es imposible", chinese: "不可能" },{ spanish: "callarla.", chinese: "让它沉默。" }] },
+        { sentences: [{ spanish: "Llora monótona", chinese: "它单调地哭泣" },{ spanish: "como llora el agua,", chinese: "像水在哭泣" },{ spanish: "como llora el viento", chinese: "像风在哭泣" },{ spanish: "sobre la nevada.", chinese: "在雪地上。" }] },
+        { sentences: [{ spanish: "Es imposible", chinese: "不可能" },{ spanish: "callarla.", chinese: "让它沉默。" }] },
+        { sentences: [{ spanish: "Llora por cosas", chinese: "它为远方的事物" },{ spanish: "lejanas.", chinese: "哭泣。" },{ spanish: "Arena del Sur caliente", chinese: "南方炽热的沙" },{ spanish: "que pide camelias blancas.", chinese: "渴求白色的山茶花。" }] },
+        { sentences: [{ spanish: "Llora flecha sin blanco,", chinese: "它哭泣没有靶子的箭矢" },{ spanish: "la tarde sin mañana,", chinese: "没有黎明的黄昏" },{ spanish: "y el primer pájaro muerto", chinese: "以及第一只死去的鸟" },{ spanish: "sobre la rama.", chinese: "在枝头。" }] },
+        { sentences: [{ spanish: "¡Oh guitarra!", chinese: "哦，吉他！" },{ spanish: "Corazón malherido", chinese: "深受重创的心灵" },{ spanish: "por cinco espadas.", chinese: "被五柄利剑刺穿。" }] }
       ] }]
     },
-      "Piedra de Sol / 太阳石": {
+    // ============================================================
+    // 帕斯《La calle / 街道》—— 确认为帕斯代表作，完整版
+    // 翻译参考赵振江等经典译本
+    // ============================================================
+    "La calle / 街道": {
       author: "Octavio Paz",
       type: "诗歌",
       chapters: [{
-        title: "Fragmento inicial",
+        title: "La calle",
         paragraphs: [
-          { sentences: [
-            { spanish: "Un sauce de cristal, un chopo de agua,", chinese: "一株水晶的柳树，一棵水中的白杨，" },
-            { spanish: "un alto surtidor que el viento arquea,", chinese: "一柱被风压弯的喷泉，" },
-            { spanish: "un árbol bien plantado mas danzante,", chinese: "一棵扎实而又翩翩起舞的树木，" },
-            { spanish: "un caminar de río que se curva,", chinese: "一条弯弯曲曲的河流，" }
-          ]},
-          { sentences: [
-            { spanish: "avanza, retrocede, da un rodeo", chinese: "前进，后退，绕弯，" },
-            { spanish: "y llega siempre: el caminar tranquilo", chinese: "但总是到达：平静地行走，" },
-            { spanish: "de una estrella o la primavera,", chinese: "像星星或春天一样，" },
-            { spanish: "sin premuras: el agua con los párpados", chinese: "不慌不忙：水合上了眼皮，" }
-          ]},
-          { sentences: [
-            { spanish: "cerrados mana toda la noche,", chinese: "闭着眼流了一整夜，" },
-            { spanish: "mana las profecías, unáanime", chinese: "把预言流淌，一体的" },
-            { spanish: "presencia de olas y rocas,", chinese: "海浪与岩石的存在，" },
-            { spanish: "deslizarse sin peso por las ondas,", chinese: "在波浪上轻盈滑行，" }
-          ]},
-          { sentences: [
-            { spanish: "día, almohada de árboles, grito de un", chinese: "白昼，树木的枕头，鸟儿拍打翅膀的" },
-            { spanish: "que se ahoga, boya de la fiebre,", chinese: "溺水者的呼喊，发烧的浮标，" },
-            { spanish: "tifón de espejos, pasmo de la aurora,", chinese: "飓风中的镜子，黎明的瘫痪，" },
-            { spanish: "y todo en el vacío: tira de luz,", chinese: "一切都在虚空中：光的打谷场，" }
-          ]},
-          { sentences: [
-            { spanish: "tira de sombra, espacio de la dicha,", chinese: "阴影的打谷场，幸福的场所，" },
-            { spanish: "temblor que se despeña y se retuerce.", chinese: "坠落又扭曲的颤抖。" },
-            { spanish: "¡oh, este árbol dichoso! —retozaba", chinese: "哦，幸福的树！——它玩味着" },
-            { spanish: "el viento en sus cabellos, y cantaba", chinese: "风在它的发丛里，并在" }
-          ]},
-          { sentences: [
-            { spanish: "al pie, libre, la piel del arboleda;", chinese: "树的皮下自由地歌唱；" },
-            { spanish: "entretejida con el humo, gris", chinese: "它与烟雾交织，灰色的" },
-            { spanish: "hilacha de una nube fugitiva,", chinese: "一缕飘逝的云絮，" },
-            { spanish: "madera sosegada de un instante...", chinese: "被抚平的瞬间的木材…" }
-          ]},
-          { sentences: [
-            { spanish: "Madera de sonido, con las ramas", chinese: "声音的木材，它的枝条" },
-            { spanish: "llovía el sol, teñía de manzanas", chinese: "下着阳光，把苹果染成" },
-            { spanish: "la tarde; el follaje se encendía,", chinese: "黄昏；树叶燃烧起来，" },
-            { spanish: "lamido por el viento que se espesa", chinese: "被浓稠的风舔着，" }
-          ]},
-          { sentences: [
-            { spanish: "de colores, colores que se doran", chinese: "颜色变浓，变成金黄" },
-            { spanish: "cuando el sol dora el rostro del maíz,", chinese: "当太阳把玉米的脸染成金色，" },
-            { spanish: "y se deshojan pájaros, se pierden", chinese: "鸟儿凋零，迷失于" },
-            { spanish: "en la fronda las nubes, ramos verdes", chinese: "树丛，云朵，绿色" }
-          ]},
-          { sentences: [
-            { spanish: "que caen sobre el cielo, racimos de", chinese: "树枝落在天空上，" },
-            { spanish: "cálices que crecen hacia el vértigo,", chinese: "向着眩晕生长的花萼，" },
-            { spanish: "colérico de luz, y el desgarrarse", chinese: "光的暴怒，以及" },
-            { spanish: "de plumas en la plenitud del vuelo.", chinese: "羽毛在飞翔圆满时的撕裂。" }
-          ]},
-          { sentences: [
-            { spanish: "Toda la tarde, un río de edades pérfidas", chinese: "整个下午，一条背信弃义的时代之河" },
-            { spanish: "bajo los arcos claros, de ese arco", chinese: "在明亮的拱门下，" },
-            { spanish: "que no es de piedra sino de almas tiernas", chinese: "那座拱门不是石头而是柔软的灵魂" },
-            { spanish: "y vegetales, olvido de la muerte.", chinese: "与草木筑成，对死亡的遗忘。" }
-          ]}
+          { sentences: [{ spanish: "Es una calle larga y silenciosa.", chinese: "这是一条漫长而寂静的街道。" },{ spanish: "Ando en tinieblas y tropiezo y caigo", chinese: "我在黑暗中行走，跌跤，爬起，" },{ spanish: "y me levanto y piso con pies ciegos", chinese: "踏着盲目的双脚，" }] },
+          { sentences: [{ spanish: "las piedras mudas y las hojas secas", chinese: "踩踏沉默的石头和干枯的树叶。" },{ spanish: "y alguien detrás de mí también las pisa:", chinese: "有人在我身后也踩着石头、树叶：" },{ spanish: "si me detengo, se detiene;", chinese: "如果我减速，他也减速；" }] },
+          { sentences: [{ spanish: "si corro, corre. Vuelvo el rostro: nadie.", chinese: "如果我奔跑，他也奔跑。我转身：无人。" },{ spanish: "Todo está oscuro y sin salida,", chinese: "一切都黑暗而无门。" },{ spanish: "y doy vueltas y vueltas en esquinas", chinese: "我在那些角落里转来转去，" }] },
+          { sentences: [{ spanish: "que dan siempre a la calle", chinese: "不停地，它们通向那永远" },{ spanish: "donde nadie me espera ni me sigue,", chinese: "没有人等待我，没有人跟随我的街道，" },{ spanish: "donde yo sigo a un hombre que tropieza", chinese: "我跟随一位跌跤的人，" }] },
+          { sentences: [{ spanish: "y se levanta y dice al verme: nadie.", chinese: "他爬起来，见着我说：无人。" }] }
         ]
       }]
-    };
-
+    }
+  };
 
   // 百年孤独配置
   const ONE_HUNDRED_YEARS_CONFIG = {
