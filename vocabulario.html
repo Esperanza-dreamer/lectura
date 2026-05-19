@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>我的单词本 · Lectura de Espe</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      background-color: #F7F5F0;
+      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      color: #2C2A29;
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #E4DDD4;
+    }
+    .header h1 {
+      font-size: 1.8rem;
+      font-weight: 500;
+      background: linear-gradient(135deg, #3A6B5B, #1F4E3F);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+    .header-buttons {
+      display: flex;
+      gap: 0.8rem;
+    }
+    .btn {
+      background: #F0EDE7;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 40px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: #2E4A3C;
+    }
+    .btn-danger {
+      background: #F5E6E6;
+      color: #B85C5C;
+    }
+    .btn-danger:hover {
+      background: #F0D8D8;
+    }
+    .btn:hover {
+      background: #E8E0D6;
+    }
+    .search-bar {
+      margin-bottom: 1.5rem;
+    }
+    .search-bar input {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border-radius: 40px;
+      border: 1px solid #E2DDD4;
+      background: white;
+      font-size: 0.9rem;
+      outline: none;
+      transition: all 0.2s;
+    }
+    .search-bar input:focus {
+      border-color: #9ABFAD;
+    }
+    .vocab-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .vocab-card {
+      background: white;
+      border-radius: 20px;
+      padding: 1rem 1.2rem;
+      border: 1px solid #E9E2D9;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+    .vocab-card:hover {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      flex-wrap: wrap;
+      margin-bottom: 0.5rem;
+    }
+    .word {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: #2F3E38;
+      font-family: 'Cormorant Garamond', serif;
+    }
+    .delete-btn {
+      background: none;
+      border: none;
+      font-size: 1.1rem;
+      cursor: pointer;
+      color: #C4B6A8;
+      transition: color 0.2s;
+      padding: 0 4px;
+    }
+    .delete-btn:hover {
+      color: #B85C5C;
+    }
+    .definition {
+      color: #5A6B5E;
+      font-size: 0.9rem;
+      margin-bottom: 0.75rem;
+      border-left: 3px solid #C8DFD0;
+      padding-left: 0.75rem;
+    }
+    .example {
+      font-size: 0.85rem;
+      color: #8A7F74;
+      margin-top: 0.5rem;
+      font-style: italic;
+      line-height: 1.5;
+    }
+    .source {
+      font-size: 0.7rem;
+      color: #A89F92;
+      margin-top: 0.5rem;
+      letter-spacing: 0.3px;
+    }
+    .empty-state {
+      text-align: center;
+      padding: 3rem;
+      color: #A89F92;
+    }
+    .count-badge {
+      background: #EBE7E0;
+      padding: 0.2rem 0.7rem;
+      border-radius: 40px;
+      font-size: 0.8rem;
+    }
+    footer {
+      margin-top: 2rem;
+      text-align: center;
+      font-size: 0.75rem;
+      color: #B8AD9F;
+      border-top: 1px solid #E4DDD4;
+      padding-top: 1.5rem;
+    }
+    /* 复习模式：点击隐藏释义和例句 */
+    .vocab-card.review-mode .definition,
+    .vocab-card.review-mode .example {
+      filter: blur(5px);
+      transition: filter 0.15s;
+      user-select: none;
+    }
+    .vocab-card.review-mode:hover .definition,
+    .vocab-card.review-mode:hover .example {
+      filter: blur(0);
+    }
+    @media (max-width: 600px) {
+      .container { padding: 1rem; }
+      .word { font-size: 1.1rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>📖 我的单词本</h1>
+    <div class="header-buttons">
+      <button class="btn" id="reviewModeBtn">🔍 复习模式</button>
+      <button class="btn btn-danger" id="clearAllBtn">🗑️ 清空全部</button>
+      <button class="btn" onclick="window.location.href='index.html'">← 返回阅读</button>
+    </div>
+  </div>
+  
+  <div class="search-bar">
+    <input type="text" id="searchInput" placeholder="🔍 搜索单词或释义...">
+  </div>
+  
+  <div id="vocabContainer" class="vocab-list">
+    <!-- 动态填充 -->
+  </div>
+  
+  <footer>
+    💡 提示：点击单词卡片可查看/隐藏释义和例句（复习模式）
+  </footer>
+</div>
+
+<script>
+  const STORAGE_KEY = 'vocabulary_book';
+  let reviewMode = false;
+  let currentFilter = '';
+  
+  function getVocabularyBook() {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored) {
+      try {
+        return JSON.parse(stored);
+      } catch(e) { return []; }
+    }
+    return [];
+  }
+  
+  function saveVocabularyBook(book) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(book));
+    renderList();
+  }
+  
+  function deleteWord(word) {
+    let book = getVocabularyBook();
+    book = book.filter(item => item.word !== word);
+    saveVocabularyBook(book);
+  }
+  
+  function clearAll() {
+    if (confirm('确定要清空全部单词吗？此操作不可撤销。')) {
+      saveVocabularyBook([]);
+    }
+  }
+  
+  function renderList() {
+    let book = getVocabularyBook();
+    const container = document.getElementById('vocabContainer');
+    const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+    
+    let filtered = book;
+    if (searchTerm) {
+      filtered = book.filter(item => 
+        item.word.toLowerCase().includes(searchTerm) || 
+        item.definition.toLowerCase().includes(searchTerm)
+      );
+    }
+    
+    if (filtered.length === 0) {
+      container.innerHTML = `<div class="empty-state">📭 暂无单词，去阅读页面添加吧</div>`;
+      return;
+    }
+    
+    container.innerHTML = filtered.map(item => `
+      <div class="vocab-card ${reviewMode ? 'review-mode' : ''}" data-word="${item.word}">
+        <div class="card-header">
+          <span class="word">${escapeHtml(item.word)}</span>
+          <button class="delete-btn" data-word="${item.word}" onclick="event.stopPropagation(); deleteWord('${item.word}')">✕</button>
+        </div>
+        <div class="definition">📖 ${escapeHtml(item.definition)}</div>
+        <div class="example">📌 "${escapeHtml(item.example)}"</div>
+        <div class="source">📚 出自：${escapeHtml(item.source)} · ${new Date(item.timestamp).toLocaleDateString()}</div>
+      </div>
+    `).join('');
+    
+    // 重新绑定卡片点击事件（复习模式切换可见性已经通过CSS控制）
+    document.querySelectorAll('.vocab-card').forEach(card => {
+      card.addEventListener('click', (e) => {
+        if (e.target.classList.contains('delete-btn')) return;
+        // 复习模式下，点击卡片临时显示内容（CSS hover 已处理，这里可选额外行为）
+        if (reviewMode) {
+          // 可选：闪烁提示
+        }
+      });
+    });
+  }
+  
+  function escapeHtml(str) {
+    if (!str) return '';
+    return str.replace(/[&<>]/g, function(m) {
+      if (m === '&') return '&amp;';
+      if (m === '<') return '&lt;';
+      if (m === '>') return '&gt;';
+      return m;
+    });
+  }
+  
+  function toggleReviewMode() {
+    reviewMode = !reviewMode;
+    const btn = document.getElementById('reviewModeBtn');
+    btn.textContent = reviewMode ? '✨ 退出复习' : '🔍 复习模式';
+    renderList();
+  }
+  
+  // 监听搜索
+  document.getElementById('searchInput').addEventListener('input', renderList);
+  document.getElementById('reviewModeBtn').addEventListener('click', toggleReviewMode);
+  document.getElementById('clearAllBtn').addEventListener('click', clearAll);
+  
+  // 初始渲染
+  renderList();
+</script>
+</body>
+</html>
