@@ -604,10 +604,10 @@
   async function lookupWordOnGlosbe(word) {
     if (glossCache[word]) return glossCache[word];
     
-    // 使用免费 CORS 代理 + WordReference 西->英页面
-    const proxy = 'https://cors-anywhere.herokuapp.com/';
+    // ！！！只需要改这一行：换成下面这个新的、更稳定的代理地址 ！！！
+    const proxy = 'https://api.allorigins.win/get?url=';
     const target = `https://www.wordreference.com/es/en/${encodeURIComponent(word)}`;
-    const url = proxy + target;
+    const url = proxy + encodeURIComponent(target);
     
     try {
       console.log(`🔍 查词: ${word}`);
