@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, maximum-scale=1.5">
-  <title>Lectura de Espe </title>
+  <title>Lectura de Espe</title>
   <style>
     * {
       margin: 0;
@@ -133,22 +133,32 @@
     .sentence:hover {
       background-color: #FDF6E3;
     }
+    .word {
+      display: inline-block;
+      cursor: pointer;
+      border-radius: 4px;
+      padding: 0 1px;
+      transition: background 0.1s ease;
+    }
+    .word:hover {
+      background-color: #E8F0FE;
+    }
+    /* 弹窗样式 */
     .translation-tooltip {
       position: absolute;
       background: #2F3E38;
       color: #FEF6E8;
       font-size: 0.9rem;
-      line-height: 1.4;
-      padding: 0.6rem 1rem;
+      line-height: 1.5;
+      padding: 0.75rem 1rem;
       border-radius: 20px;
-      max-width: 280px;
+      max-width: 360px;
+      min-width: 200px;
       white-space: normal;
       word-break: break-word;
       z-index: 120;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-      pointer-events: none;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
       font-family: 'Inter', system-ui, sans-serif;
-      transition: opacity 0.15s;
       backdrop-filter: blur(2px);
     }
     .translation-tooltip::before {
@@ -161,6 +171,39 @@
       background: #2F3E38;
       transform: rotate(45deg);
       border-radius: 2px;
+    }
+    .tooltip-word {
+      font-weight: 600;
+      font-size: 1rem;
+      margin-bottom: 8px;
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+      padding-bottom: 4px;
+    }
+    .tooltip-def {
+      margin: 8px 0;
+      line-height: 1.4;
+    }
+    .tooltip-btn {
+      background: #5A7A6A;
+      border: none;
+      color: white;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: background 0.2s;
+    }
+    .tooltip-btn:hover {
+      background: #3E5C4E;
+    }
+    .tooltip-btn-added {
+      background: #4A6A5A;
+      opacity: 0.7;
+      cursor: default;
+    }
+    .tooltip-btn-added:hover {
+      background: #4A6A5A;
     }
     .paragraph {
       margin-bottom: 1.5rem;
@@ -285,7 +328,7 @@
       .reading-area {
         padding: 1.8rem;
       }
-      .sentence {
+      .sentence, .word {
         font-size: 1rem;
       }
     }
@@ -315,6 +358,7 @@
         <option value="font-mono">质感等宽 · Mono</option>
       </select>
       <span class="progress-badge" id="globalProgressBadge">📚 阅读进度 0%</span>
+      <button id="vocabBtn" class="chapter-btn" style="background:#2E4A3C; color:white; border:none;">📖 单词本 (<span id="vocabCount">0</span>)</button>
     </div>
   </div>
 
@@ -336,7 +380,7 @@
 
   <div class="action-bar">
     <button class="mark-btn" id="markChapterBtn">✅ 标记本章读完</button>
-    <div class="status-message" id="readingStatusMsg">✨ 点击句子即可查看翻译</div>
+    <div class="status-message" id="readingStatusMsg">✨ 点击单词查询释义/整句翻译</div>
   </div>
 
   <div class="book-shelf">
@@ -348,12 +392,13 @@
 <script>
   // ============================================================
   // 静态作品数据（完整保留：博尔赫斯、聂鲁达、洛尔迦、帕斯）
-  // 帕斯作品：《La calle / 街道》（完整版）
+  // 这些作品使用整句翻译模式
   // ============================================================
   const STATIC_NOVEL_DATA = {
     "瞬息 / El instante": {
       author: "Jorge Luis Borges",
       type: "诗歌",
+      mode: "sentence",
       chapters: [{ title: "全诗", paragraphs: [
         { sentences: [{ spanish: "¿Dónde estarán los siglos, dónde el sueño", chinese: "那些世纪何在？那些梦里" },{ spanish: "de espadas que los tártaros soñaron,", chinese: "鞑靼人梦见的刀剑在哪里" },{ spanish: "dónde los fuertes muros que allanaron,", chinese: "那些被夷平的坚固城墙何在" },{ spanish: "dónde el Árbol de Adán y el otro Leño?", chinese: "亚当的树与另架木船在哪里？" }] },
         { sentences: [{ spanish: "El presente está solo. La memoria", chinese: "当下乃是唯一。记忆" },{ spanish: "erige el tiempo. Sucesión y engaño", chinese: "将时间筑起。连续性与欺骗" },{ spanish: "es la rutina del reloj. El año", chinese: "是钟表的惯例。一年的虚空" },{ spanish: "no es menos vano que la vana historia.", chinese: "不亚于虚空的历史。" }] },
@@ -364,6 +409,7 @@
     "1964": {
       author: "Jorge Luis Borges",
       type: "诗歌",
+      mode: "sentence",
       chapters: [
         { title: "I", paragraphs: [{ sentences: [{ spanish: "Ya no es mágico el mundo. Te han dejado.", chinese: "世界已不再神奇。他们已远去。" },{ spanish: "Ya no compartirás la clara luna", chinese: "不再与你分享明月" },{ spanish: "ni los lentos jardines. Ya no hay una", chinese: "并那些柔缓的花园。不再有" },{ spanish: "luna que no sea espejo del pasado,", chinese: "那月亮如过往之镜" }] },{ sentences: [{ spanish: "cristal de soledad, sol de agonías.", chinese: "孤独之水晶，苦闷之太阳。" },{ spanish: "Adiós las mutuas manos y las sienes", chinese: "再见了，那因爱紧贴的手掌" },{ spanish: "que acercaba el amor. Hoy sólo tienes", chinese: "依偎的头颅。今日你唯余" },{ spanish: "la fiel memoria y los desiertos días.", chinese: "忠实的记忆和虚掷的年岁。" }] },{ sentences: [{ spanish: "Nadie pierde (repites vanamente)", chinese: "人们失去的（你空空地絮叨）" },{ spanish: "sino lo que no tiene y no ha tenido", chinese: "只是没有和不曾拥有之物" },{ spanish: "nunca, pero no basta ser valiente", chinese: "但是单凭勇气，尚不足" },{ spanish: "para aprender el arte del olvido.", chinese: "掌握遗忘这门艺术。" }] },{ sentences: [{ spanish: "Un símbolo, una rosa, te desgarra", chinese: "一种象征，一枝玫瑰令你心碎" },{ spanish: "y te puede matar una guitarra.", chinese: "吉他一弹魄散魂飞。" }] }] },
         { title: "II", paragraphs: [{ sentences: [{ spanish: "Ya no seré feliz. Tal vez no importa.", chinese: "我将不再感到幸福。也许，没有关系。" },{ spanish: "Hay tantas otras cosas en el mundo;", chinese: "这世界有太多其他的事物" },{ spanish: "un instante cualquiera es más profundo", chinese: "每一瞬都比海洋更丰富" },{ spanish: "y diverso que el mar. La vida es corta", chinese: "更深邃。朝生夕死" }] },{ sentences: [{ spanish: "y aunque las horas son tan largas, una", chinese: "时钟与之相比更漫长" },{ spanish: "oscura maravilla nos acecha,", chinese: "一种漆黑的奇迹窥视我们" },{ spanish: "la muerte, ese otro mar, esa otra flecha", chinese: "死亡，另一种海洋，另一种箭羽" },{ spanish: "que nos libra del sol y de la luna", chinese: "将我们从太阳，月亮" }] },{ sentences: [{ spanish: "y del amor. La dicha que me diste", chinese: "以及爱中解放。你给予我又剥夺的" },{ spanish: "y me quitaste debe ser borrada;", chinese: "欢愉应该被遗忘" },{ spanish: "lo que era todo tiene que ser nada.", chinese: "一切都是虚空，都是捕风。" },{ spanish: "Sólo que me queda el goce de estar triste,", chinese: "我仅存的快乐只有悲伤" }] },{ sentences: [{ spanish: "esa vana costumbre que me inclina", chinese: "只有徒劳的习惯使我倾斜" },{ spanish: "al Sur, a cierta puerta, a cierta esquina.", chinese: "向南，向某一扇门，某个角落。" }] }] }
@@ -372,6 +418,7 @@
     "镜子与面具 / El espejo y la máscara": {
       author: "Jorge Luis Borges",
       type: "短篇小说",
+      mode: "sentence",
       chapters: [
         { title: "第一部分", paragraphs: [{ sentences: [{ spanish: "Cuentan que en la batalla de Clontarf, en la que fueron humillados los noruegos, el rey supremo llamó a su poeta y le dijo:", chinese: "克朗塔夫一战，挪威人威风扫地，高贵的国王召来诗人对他说：" },{ spanish: "«Las hazañas más ilustres pierden su esplendor si no las fija la palabra. Quiero que cantes mi victoria y mi loor. Yo seré Eneas; tú serás mi Virgilio. ¿Te consideras capaz de esa tarea?»", chinese: "“最显赫的功绩如果不用文字铭记下来也要失去它的熠熠光彩。我要你歌颂我的胜利，把我赞美。我将成为埃涅阿斯，你将成为讴歌我的维吉尔。你认为自己能不能胜任？”" }] },{ sentences: [{ spanish: "«Sí, rey», dijo el poeta. «Soy el cantor. Llevo doce años estudiando la ciencia de las sílabas. Sé de memoria las trescientas sesenta fábulas que son la base de la verdadera poesía. Las historias de Ulster y de Munster están en las cuerdas de mi arpa. Domino los más antiguos vocablos y las más complejas metáforas. Conozco los secretos de nuestro arte. Puedo cantar el amor, el robo de ganado, la navegación y la guerra. Sé los linajes mitológicos de todas las casas reales de Irlanda. Conozco las virtudes de las hierbas, la astrología, las matemáticas y los cánones de la Iglesia. He vencido a mis rivales en certámenes públicos. Soy maestro en la sátira, que provoca enfermedades de la piel, incluso la lepra. Sé manejar la espada, como lo he demostrado en tus batallas. Sólo hay una cosa que ignoro: cómo agradecer tu generosidad.»", chinese: "“能，国王陛下，”诗人说。“我是歌手。我潜心研究韵律学有十二年之久。作为正宗诗歌基础的三百六十个寓言我都记诵。厄尔斯特和芒斯特的史实都积蓄在我的琴弦上。我满腹珠玑，最古雅的字句、最深奥的隐喻都如数家珍。我掌握我们这门艺术的秘密。我可以赞扬爱情、偷盗牲畜、航海和战争。我了解爱尔兰所有王室的神话般的家谱。我深谙药草的功效、星象占卜、数学和教会法规。我在公开的比赛中打败了我的对手。我精通讽刺，而讽刺能诱发包括麻风在内的皮肤病。我会使剑，在陛下的战役中已经证明。我只有一件事不懂：那就是如何感激陛下的恩赐。”" }] },{ sentences: [{ spanish: "El rey, que se hastiaba de las largas enumeraciones, le dio las gracias y dijo:", chinese: "国王很容易对别人的长篇大论感到厌烦，听他说完，舒了一口气：" },{ spanish: "«Sé de esas cosas. Me han dicho que el ruiseñor ya canta en Inglaterra. Cuando pasen las lluvias y las nieves, cuando el ruiseñor regrese del Sur, recitarás tu oda ante la corte y ante el Colegio de los Poetas. Te doy un año entero. Pulirás cada palabra y cada letra. Conoces mi carácter, la recompensa no será indigna de tu vigilia.»", chinese: "“那类事情，我很清楚。听说夜莺已在英格兰歌唱。等雨和雪的季节过去，等夜莺从南方归来，你就在朝廷当着诗人社的成员朗诵你的颂歌。我给你整整一年时间。每字每行，你都得推敲斟酌。你知道寡人的脾气，报酬决不会亏待你夙夜劬劳。”" }] },{ sentences: [{ spanish: "«Señor, la mejor recompensa es ver tu rostro», dijo el poeta, que conocía el arte de la adulación.", chinese: "“陛下，最好的报酬莫过于一睹龙颜，”诗人说。他颇通谄媚之道。" },{ spanish: "Hizo la reverencia y se fue, mientras ya entreveía algunos versos.", chinese: "他行礼告辞，心里已经琢磨出一些诗句。" }] }] },
         { title: "第二部分", paragraphs: [{ sentences: [{ spanish: "El año fue de pestes y de rebeliones. Cuando se cumplió el plazo, el poeta presentó su oda. La recitó pausadamente, sin mirar el manuscrito. El rey aprobaba con la cabeza. Todos imitaban su gesto, aunque no alcanzaban a oír una sola palabra.", chinese: "这一年瘟疫流行，叛乱频仍，期限到时诗人交上颂歌。他根本不看手稿，不慌不忙地背诵起来。国王不住点头赞许。满朝文武，甚至挤在门口的人都看样学样，尽管一个字都没有听清。" },{ spanish: "Finalmente el rey dijo:", chinese: "国王最后发话了。" },{ spanish: "«Apruebo tu obra. Es otra victoria. Has dado a cada vocablo su genuino sentido, has usado adjetivos que tienen un ilustre origen. Toda la oda se apoya en ilustres ejemplos clásicos. La guerra es el tejido de los hombres, la sangre que corre de la espada es agua. El mar tiene su dios, las nubes anuncian el porvenir. Has manejado con destreza la rima, la aliteración, la asonancia, las cantidades, los artificios de la retórica, la sabia alternación de los metros. Si se perdiera la literatura de Irlanda —omen no habrá— podría reconstruirse con tu oda clásica. Mando que treinta copistas la transcriban doce veces.»", chinese: "“我认可你的作品。那是又一次胜利。你给每一个词以它真正的含义，你用的形容词无一无出处，都有最早的诗人的先例。整篇颂歌中的形象在古典作品中都有根有据。战争是人们壮丽的交织，剑头淌下的水是鲜血。海洋有它的掌管神，云彩预示未来。你熟练地运用了脚韵、叠韵、近似韵、音量、修辞的技巧、格律的呼应。爱尔兰文学即使泯灭——但愿没有不祥的征兆！——凭你的古典似的颂歌就能重建。我命令三十名誉写员照抄十二遍。”" }] },{ sentences: [{ spanish: "Calló un momento y agregó:", chinese: "他静默了片刻，接着又说：" },{ spanish: "«Todo está bien y sin embargo nada ha pasado. En las venas no corre más aprisa la sangre. Las manos no han buscado los arcos. Nadie ha palidecido. Nadie profirió un grito de combate, nadie opuso el pecho a los vikingos. Te otorgamos otro año para que apruebes otra oda, poeta. Te regalamos este espejo de plata, como prenda de nuestro favor.»", chinese: "“好虽然好，但是毫无反应。脉管里的血流并没有加速。手没有抓起弓箭。谁的脸色都没有变。谁都没有发出战斗的呐喊，谁都没有挺起胸膛面对北欧海盗。我们再给你一年时间，赞赏你另一篇颂歌，诗人。现在赐给你一面银镜，作为嘉奖。”" },{ spanish: "«Doy las gracias y comprendo», dijo el poeta.", chinese: "“我明白了，十分感谢，”诗人说。" }] }] },
@@ -382,6 +429,7 @@
     "Poema XX": {
       author: "Pablo Neruda",
       type: "诗歌",
+      mode: "sentence",
       chapters: [{ title: "Poema XX", paragraphs: [
         { sentences: [{ spanish: "Puedo escribir los versos más tristes esta noche.", chinese: "今夜我可以写出最哀伤的诗句。" },{ spanish: "Escribir, por ejemplo: 'La noche está estrellada,", chinese: "写，譬如说，'夜缀满繁星，" },{ spanish: "y tiritan, azules, los astros, a lo lejos'.", chinese: "星星在远方，湛蓝地颤抖。'" }] },
         { sentences: [{ spanish: "El viento de la noche gira en el cielo y canta.", chinese: "夜风在天空里打转并歌唱。" },{ spanish: "Puedo escribir los versos más tristes esta noche.", chinese: "今夜我可以写出最哀伤的诗句。" }] },
@@ -403,6 +451,7 @@
     "La Guitarra": {
       author: "Federico García Lorca",
       type: "诗歌",
+      mode: "sentence",
       chapters: [{ title: "La Guitarra", paragraphs: [
         { sentences: [{ spanish: "Empieza el llanto", chinese: "开始哭泣" },{ spanish: "de la guitarra.", chinese: "吉他的哭泣。" }] },
         { sentences: [{ spanish: "Se rompen las copas", chinese: "黎明的酒杯" },{ spanish: "de la madrugada.", chinese: "碎裂。" }] },
@@ -416,13 +465,10 @@
         { sentences: [{ spanish: "¡Oh guitarra!", chinese: "哦，吉他！" },{ spanish: "Corazón malherido", chinese: "深受重创的心灵" },{ spanish: "por cinco espadas.", chinese: "被五柄利剑刺穿。" }] }
       ] }]
     },
-    // ============================================================
-    // 帕斯《La calle / 街道》—— 确认为帕斯代表作，完整版
-    // 翻译参考赵振江等经典译本
-    // ============================================================
     "La calle / 街道": {
       author: "Octavio Paz",
       type: "诗歌",
+      mode: "sentence",
       chapters: [{
         title: "La calle",
         paragraphs: [
@@ -436,13 +482,14 @@
     }
   };
 
-  // 百年孤独配置
+  // 百年孤独配置（使用单词查词模式）
   const ONE_HUNDRED_YEARS_CONFIG = {
     name: "Cien años de soledad",
     author: "Gabriel García Márquez",
     spanishFile: "cien_anos_soledad.txt",
     chineseFile: "hundredyearsofsolitude.txt",
-    isDynamic: true
+    isDynamic: true,
+    mode: "word"
   };
 
   let dynamicChapters = [];
@@ -450,10 +497,298 @@
   let dynamicLoadError = null;
   let NOVEL_DATA = { ...STATIC_NOVEL_DATA };
 
+  // 查词缓存
+  let glossCache = {};
+
   // ============================================================
-  // 修正后的英文/中文解析函数（核心修复）
-  // 简单规则：空行分割章节，每章内的每一行都是一个段落
-  // 不依赖任何缩进，完全逐行读取
+  // 单词本存储操作
+  // ============================================================
+  const STORAGE_KEY = 'vocabulary_book';
+  
+  function getVocabularyBook() {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored) {
+      try {
+        return JSON.parse(stored);
+      } catch(e) { return []; }
+    }
+    return [];
+  }
+  
+  function saveVocabularyBook(book) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(book));
+    updateVocabCountDisplay();
+  }
+  
+  function addToVocabulary(word, definition, example, source) {
+    let book = getVocabularyBook();
+    // 检查是否已存在相同单词
+    const existingIndex = book.findIndex(item => item.word === word);
+    const newEntry = {
+      word: word,
+      definition: definition,
+      example: example,
+      source: source,
+      timestamp: Date.now()
+    };
+    if (existingIndex !== -1) {
+      // 覆盖已有记录
+      book[existingIndex] = newEntry;
+    } else {
+      book.push(newEntry);
+    }
+    saveVocabularyBook(book);
+  }
+  
+  function updateVocabCountDisplay() {
+    const countSpan = document.getElementById('vocabCount');
+    if (countSpan) {
+      const book = getVocabularyBook();
+      countSpan.textContent = book.length;
+    }
+  }
+  
+  // 单词本按钮跳转
+  document.getElementById('vocabBtn')?.addEventListener('click', () => {
+    window.location.href = 'vocabulario.html';
+  });
+
+  // ============================================================
+  // 单词提取函数（从点击位置提取完整单词）
+  // ============================================================
+  function getWordAtPoint(event, element) {
+    try {
+      let range = null;
+      if (document.caretRangeFromPoint) {
+        range = document.caretRangeFromPoint(event.clientX, event.clientY);
+      } else if (document.caretPositionFromPoint) {
+        const pos = document.caretPositionFromPoint(event.clientX, event.clientY);
+        if (pos) {
+          range = document.createRange();
+          range.setStart(pos.offsetNode, pos.offset);
+          range.setEnd(pos.offsetNode, pos.offset);
+        }
+      }
+      if (!range) return null;
+      
+      const textNode = range.startContainer;
+      if (textNode.nodeType !== Node.TEXT_NODE) return null;
+      
+      const offset = range.startOffset;
+      const text = textNode.textContent;
+      
+      let start = offset;
+      let end = offset;
+      
+      while (start > 0 && /[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ]/.test(text[start - 1])) start--;
+      while (end < text.length && /[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ]/.test(text[end])) end++;
+      
+      if (start === end) return null;
+      return text.substring(start, end).toLowerCase();
+    } catch (e) {
+      console.warn("提取单词失败:", e);
+      return null;
+    }
+  }
+  
+  // 提取完整句子（从段落文本中）
+  function extractSentenceFromParagraph(paragraphText, word, wordPositionInParagraph) {
+    // 简化版：直接返回段落文本作为例句
+    // 更精确的实现可以通过搜索标点符号来截取
+    return paragraphText.trim();
+  }
+
+  // ============================================================
+  // Glosbe API 查词函数
+  // ============================================================
+  async function lookupWordOnGlosbe(word) {
+    if (glossCache[word]) return glossCache[word];
+    
+    const url = `https://glosbe.com/gapi/translate?from=spa&dest=eng&format=json&phrase=${encodeURIComponent(word)}`;
+    
+    try {
+      const response = await fetch(url);
+      const data = await response.json();
+      
+      if (data.tuc && data.tuc.length > 0) {
+        const translations = data.tuc
+          .filter(item => item.phrase && item.phrase.language === 'eng')
+          .map(item => item.phrase.text)
+          .filter((v, i, a) => a.indexOf(v) === i)
+          .slice(0, 5);
+        
+        if (translations.length > 0) {
+          glossCache[word] = translations;
+          return translations;
+        }
+      }
+      glossCache[word] = [];
+      return [];
+    } catch (error) {
+      console.error("Glosbe查词失败:", error);
+      return [];
+    }
+  }
+
+  // ============================================================
+  // 通用弹窗管理（点击页面空白处关闭）
+  // ============================================================
+  let currentTooltip = null;
+  let currentTooltipTarget = null;
+  
+  function removeTooltip() {
+    if (currentTooltip) {
+      currentTooltip.remove();
+      currentTooltip = null;
+      currentTooltipTarget = null;
+    }
+  }
+  
+  function showWordTooltip(word, translations, rect, paragraphText, sourceBook) {
+    removeTooltip();
+    
+    const tooltip = document.createElement('div');
+    tooltip.className = 'translation-tooltip';
+    
+    const wordDiv = document.createElement('div');
+    wordDiv.className = 'tooltip-word';
+    wordDiv.textContent = word;
+    tooltip.appendChild(wordDiv);
+    
+    const defDiv = document.createElement('div');
+    defDiv.className = 'tooltip-def';
+    defDiv.textContent = translations.join('; ');
+    tooltip.appendChild(defDiv);
+    
+    const btn = document.createElement('button');
+    btn.textContent = '➕ 加入单词本';
+    btn.className = 'tooltip-btn';
+    btn.onclick = async (e) => {
+      e.stopPropagation();
+      // 提取例句（整个段落作为例句）
+      const example = paragraphText.length > 200 ? paragraphText.substring(0, 200) + '...' : paragraphText;
+      addToVocabulary(word, translations.join('; '), example, sourceBook);
+      btn.textContent = '✅ 已添加';
+      btn.classList.add('tooltip-btn-added');
+      btn.disabled = true;
+      updateVocabCountDisplay();
+    };
+    tooltip.appendChild(btn);
+    
+    document.body.appendChild(tooltip);
+    
+    let left = rect.left + window.scrollX;
+    let top = rect.bottom + window.scrollY + 8;
+    
+    const tooltipRect = tooltip.getBoundingClientRect();
+    if (left + tooltipRect.width > window.innerWidth - 20) {
+      left = window.innerWidth - tooltipRect.width - 20;
+    }
+    
+    tooltip.style.left = `${left}px`;
+    tooltip.style.top = `${top}px`;
+    
+    currentTooltip = tooltip;
+    currentTooltipTarget = { word, rect };
+  }
+  
+  function showSentenceTooltip(chineseText, rect) {
+    removeTooltip();
+    
+    const tooltip = document.createElement('div');
+    tooltip.className = 'translation-tooltip';
+    tooltip.textContent = chineseText;
+    document.body.appendChild(tooltip);
+    
+    let left = rect.left + window.scrollX;
+    let top = rect.bottom + window.scrollY + 8;
+    
+    const tooltipRect = tooltip.getBoundingClientRect();
+    if (left + tooltipRect.width > window.innerWidth - 20) {
+      left = window.innerWidth - tooltipRect.width - 20;
+    }
+    
+    tooltip.style.left = `${left}px`;
+    tooltip.style.top = `${top}px`;
+    
+    currentTooltip = tooltip;
+  }
+  
+  // 全局点击处理（用于关闭弹窗）
+  document.addEventListener('click', function(e) {
+    if (currentTooltip && !currentTooltip.contains(e.target)) {
+      removeTooltip();
+    }
+  });
+
+  // ============================================================
+  // 渲染章节（支持两种模式）
+  // ============================================================
+  function renderChapterWithMode(chapter, mode, sourceBookName) {
+    const container = document.createElement('div');
+    container.className = `reading-area ${currentFontClass}`;
+    
+    if (mode === 'word') {
+      // 单词查词模式：将文本拆分为单词
+      for (const para of chapter.paragraphs) {
+        const pDiv = document.createElement('div');
+        pDiv.className = 'paragraph';
+        
+        for (const sent of para.sentences) {
+          const text = sent.spanish;
+          const tokens = text.split(/([a-zA-ZáéíóúüñÁÉÍÓÚÜÑ]+|[^a-zA-ZáéíóúüñÁÉÍÓÚÜÑ]+)/g);
+          const paragraphText = text;
+          
+          for (const token of tokens) {
+            if (!token) continue;
+            if (/[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ]/.test(token)) {
+              const wordSpan = document.createElement('span');
+              wordSpan.className = 'word';
+              wordSpan.textContent = token;
+              wordSpan.addEventListener('click', async (e) => {
+                e.stopPropagation();
+                const rect = wordSpan.getBoundingClientRect();
+                const word = token.toLowerCase();
+                const translations = await lookupWordOnGlosbe(word);
+                if (translations && translations.length > 0) {
+                  showWordTooltip(word, translations, rect, paragraphText, sourceBookName);
+                } else {
+                  showWordTooltip(word, ['未找到释义'], rect, paragraphText, sourceBookName);
+                }
+              });
+              pDiv.appendChild(wordSpan);
+            } else {
+              pDiv.appendChild(document.createTextNode(token));
+            }
+          }
+        }
+        container.appendChild(pDiv);
+      }
+    } else {
+      // 整句翻译模式
+      for (const para of chapter.paragraphs) {
+        const pDiv = document.createElement('div');
+        pDiv.className = 'paragraph';
+        for (const sent of para.sentences) {
+          const span = document.createElement('span');
+          span.className = 'sentence';
+          span.textContent = sent.spanish + ' ';
+          span.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const rect = span.getBoundingClientRect();
+            showSentenceTooltip(sent.chinese, rect);
+          });
+          pDiv.appendChild(span);
+        }
+        container.appendChild(pDiv);
+      }
+    }
+    
+    return container;
+  }
+
+  // ============================================================
+  // 解析文件函数
   // ============================================================
   function parseChineseFile(content) {
     const lines = content.split(/\r?\n/);
@@ -462,41 +797,29 @@
     
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i];
-      
-      // 检测空行作为章节分隔符
       if (line === '' || line === null || line.trim() === '') {
-        // 遇到空行，保存当前章节（如果有内容）
         if (currentChapter && currentChapter.paragraphs.length > 0) {
           chapters.push(currentChapter);
           currentChapter = null;
         }
         continue;
       }
-      
-      // 非空行：这是章节内容
       if (line.trim().length > 0) {
-        // 如果没有当前章节，创建新章节
         if (!currentChapter) {
           currentChapter = {
             title: `第${chapters.length + 1}章`,
             paragraphs: []
           };
         }
-        // 每一行都是一个独立的段落
         currentChapter.paragraphs.push(line.trim());
       }
     }
-    
-    // 保存最后一章
     if (currentChapter && currentChapter.paragraphs.length > 0) {
       chapters.push(currentChapter);
     }
-    
-    console.log(`解析中文文件完成，共 ${chapters.length} 章`);
     return chapters;
   }
 
-  // 西语解析函数（根据你的格式：数字章节号 + 正文段落）
   function parseSpanishFile(content) {
     const lines = content.split(/\r?\n/);
     const chapters = [];
@@ -505,25 +828,18 @@
     
     while (i < lines.length) {
       const line = lines[i];
-      
-      // 检测章节号（纯数字）
       if (line && /^\d+$/.test(line.trim())) {
-        // 保存上一章
         if (currentChapter && currentChapter.paragraphs.length > 0) {
           chapters.push(currentChapter);
         }
-        // 开始新章节
         currentChapter = {
           title: `Capítulo ${line.trim()}`,
           paragraphs: []
         };
         i++;
-        // 跳过章节号后的空行
         while (i < lines.length && lines[i].trim() === '') i++;
         continue;
       }
-      
-      // 正文段落：非空且不是纯数字
       if (line && line.trim().length > 0 && !/^\d+$/.test(line.trim())) {
         if (currentChapter) {
           currentChapter.paragraphs.push(line.trim());
@@ -531,45 +847,33 @@
       }
       i++;
     }
-    
-    // 保存最后一章
     if (currentChapter && currentChapter.paragraphs.length > 0) {
       chapters.push(currentChapter);
     }
-    
-    console.log(`解析西语文件完成，共 ${chapters.length} 章`);
     return chapters;
   }
 
-  // 拆分句子（按标点符号）
   function splitIntoSentences(text) {
     if (!text) return [];
-    // 按句号、问号、感叹号、分号拆分
     const sentences = text.split(/(?<=[.?!;:])|(?<=[。？！；：])/g);
     return sentences.filter(s => s.trim().length > 0);
   }
 
-  // 合并章节（逐段落对齐）
   function mergeChapters(spanishChapters, chineseChapters) {
     const maxChapters = Math.min(spanishChapters.length, chineseChapters.length);
     const result = [];
-    
-    console.log(`合并章节：西语 ${spanishChapters.length} 章，中文 ${chineseChapters.length} 章，取前 ${maxChapters} 章`);
     
     for (let i = 0; i < maxChapters; i++) {
       const spanishChap = spanishChapters[i];
       const chineseChap = chineseChapters[i];
       const paragraphs = [];
-      
       const maxParas = Math.min(spanishChap.paragraphs.length, chineseChap.paragraphs.length);
       
       for (let j = 0; j < maxParas; j++) {
         const spanishPara = spanishChap.paragraphs[j];
         const chinesePara = chineseChap.paragraphs[j];
-        
         const spanishSentences = splitIntoSentences(spanishPara);
         const chineseSentences = splitIntoSentences(chinesePara);
-        
         const sentences = [];
         const maxSent = Math.min(spanishSentences.length, chineseSentences.length);
         
@@ -579,8 +883,6 @@
             chinese: chineseSentences[k].trim()
           });
         }
-        
-        // 如果西语句子多于中文，用最后一个中文补全
         if (spanishSentences.length > maxSent) {
           for (let k = maxSent; k < spanishSentences.length; k++) {
             sentences.push({
@@ -589,55 +891,43 @@
             });
           }
         }
-        
         if (sentences.length > 0) {
           paragraphs.push({ sentences });
         }
       }
-      
       result.push({
         title: spanishChap.title || `Capítulo ${i + 1}`,
         paragraphs: paragraphs
       });
     }
-    
-    console.log(`合并完成，共 ${result.length} 章`);
     return result;
   }
 
+  // ============================================================
   // 加载百年孤独
+  // ============================================================
   async function loadOneHundredYears() {
     isLoadingDynamic = true;
     dynamicLoadError = null;
     
     try {
-      console.log('开始加载西语文件:', ONE_HUNDRED_YEARS_CONFIG.spanishFile);
       const spanishResponse = await fetch(ONE_HUNDRED_YEARS_CONFIG.spanishFile);
-      if (!spanishResponse.ok) {
-        throw new Error(`无法加载西语文件: ${spanishResponse.status}`);
-      }
+      if (!spanishResponse.ok) throw new Error(`无法加载西语文件: ${spanishResponse.status}`);
       const spanishContent = await spanishResponse.text();
-      console.log(`西语文件加载成功，长度: ${spanishContent.length} 字符`);
       
-      console.log('开始加载中文文件:', ONE_HUNDRED_YEARS_CONFIG.chineseFile);
       const chineseResponse = await fetch(ONE_HUNDRED_YEARS_CONFIG.chineseFile);
-      if (!chineseResponse.ok) {
-        throw new Error(`无法加载中文文件: ${chineseResponse.status}`);
-      }
+      if (!chineseResponse.ok) throw new Error(`无法加载中文文件: ${chineseResponse.status}`);
       const chineseContent = await chineseResponse.text();
-      console.log(`中文文件加载成功，长度: ${chineseContent.length} 字符`);
       
-      console.log('开始解析文件...');
       const spanishChapters = parseSpanishFile(spanishContent);
       const chineseChapters = parseChineseFile(chineseContent);
-      
-      console.log(`解析结果: 西语 ${spanishChapters.length} 章, 中文 ${chineseChapters.length} 章`);
       
       dynamicChapters = mergeChapters(spanishChapters, chineseChapters);
       
       NOVEL_DATA[ONE_HUNDRED_YEARS_CONFIG.name] = {
         author: ONE_HUNDRED_YEARS_CONFIG.author,
         type: "长篇小说",
+        mode: "word",
         chapters: dynamicChapters
       };
       
@@ -649,12 +939,10 @@
       }
       
       isLoadingDynamic = false;
-      console.log('百年孤独加载完成，总章节数:', dynamicChapters.length);
       renderBookShelf();
       if (currentBookId === ONE_HUNDRED_YEARS_CONFIG.name) {
         renderCurrentChapter();
       }
-      
     } catch (error) {
       console.error('加载百年孤独失败:', error);
       dynamicLoadError = error;
@@ -663,7 +951,9 @@
     }
   }
 
-  // 初始化进度
+  // ============================================================
+  // 初始化进度和全局变量
+  // ============================================================
   let readingProgress = {};
   for (const [bookName, bookData] of Object.entries(STATIC_NOVEL_DATA)) {
     readingProgress[bookName] = {
@@ -711,29 +1001,15 @@
     }
     
     const chapter = book.chapters[currentChapterIdx];
+    const mode = book.mode || "sentence";
+    const newContainer = renderChapterWithMode(chapter, mode, currentBookId);
     readingContainer.innerHTML = '';
-    readingContainer.className = `reading-area ${currentFontClass}`;
-
-    for (const para of chapter.paragraphs) {
-      const pDiv = document.createElement('div');
-      pDiv.className = 'paragraph';
-      for (const sent of para.sentences) {
-        const span = document.createElement('span');
-        span.className = 'sentence';
-        span.setAttribute('data-spanish', sent.spanish);
-        span.setAttribute('data-chinese', sent.chinese);
-        span.textContent = sent.spanish + ' ';
-        span.addEventListener('click', (e) => {
-          e.stopPropagation();
-          showTranslationTooltip(e, sent.chinese);
-        });
-        pDiv.appendChild(span);
-      }
-      readingContainer.appendChild(pDiv);
+    while (newContainer.firstChild) {
+      readingContainer.appendChild(newContainer.firstChild);
     }
-
-    const chapterTitle = chapter.title || `第${currentChapterIdx+1}部分`;
-    chapterCounterSpan.innerText = `${chapterTitle}`;
+    readingContainer.className = `reading-area ${currentFontClass}`;
+    
+    chapterCounterSpan.innerText = chapter.title || `第${currentChapterIdx+1}部分`;
     const isCompleted = readingProgress[currentBookId]?.completedChapters[currentChapterIdx] || false;
     if (isCompleted) {
       markBtn.classList.add('completed');
@@ -747,37 +1023,12 @@
     renderBookShelf();
   }
 
-  let activeTooltip = null;
-  function showTranslationTooltip(event, chineseText) {
-    if (activeTooltip) { activeTooltip.remove(); activeTooltip = null; }
-    const targetSpan = event.currentTarget;
-    const rect = targetSpan.getBoundingClientRect();
-    const tooltip = document.createElement('div');
-    tooltip.className = 'translation-tooltip';
-    tooltip.textContent = chineseText;
-    document.body.appendChild(tooltip);
-    const tooltipRect = tooltip.getBoundingClientRect();
-    let left = rect.left + window.scrollX;
-    let top = rect.bottom + window.scrollY + 8;
-    if (left + tooltipRect.width > window.innerWidth - 20) left = window.innerWidth - tooltipRect.width - 20;
-    tooltip.style.left = `${left}px`;
-    tooltip.style.top = `${top}px`;
-    activeTooltip = tooltip;
-    const removeListener = (e) => {
-      if (activeTooltip && !activeTooltip.contains(e.target) && e.target !== targetSpan) {
-        activeTooltip.remove(); activeTooltip = null; document.removeEventListener('click', removeListener);
-      }
-    };
-    setTimeout(() => document.addEventListener('click', removeListener), 50);
-    setTimeout(() => { if(activeTooltip){ activeTooltip.remove(); activeTooltip = null; } }, 2500);
-  }
-
   function markCurrentChapterComplete() {
     const progress = readingProgress[currentBookId];
     if (!progress) return;
     if (progress.completedChapters[currentChapterIdx]) {
       readingStatusMsg.innerText = '📌 本章之前已经标记过啦！';
-      setTimeout(() => { readingStatusMsg.innerText = '✨ 点击句子即可查看翻译'; }, 1500);
+      setTimeout(() => { readingStatusMsg.innerText = '✨ 点击单词查询释义/整句翻译'; }, 1500);
       return;
     }
     progress.completedChapters[currentChapterIdx] = true;
@@ -785,14 +1036,9 @@
     markBtn.classList.add('completed');
     markBtn.innerHTML = '✅ 本章已完成';
     readingStatusMsg.innerText = '🎉 章节进度已更新！继续阅读吧。';
-    setTimeout(() => { readingStatusMsg.innerText = '✨ 点击句子即可查看翻译'; }, 2000);
+    setTimeout(() => { readingStatusMsg.innerText = '✨ 点击单词查询释义/整句翻译'; }, 2000);
     updateGlobalProgress();
     renderBookShelf();
-    const allCompleted = progress.completedChapters.every(v => v === true);
-    if (allCompleted) {
-      readingStatusMsg.innerText = `🏆 恭喜！《${currentBookId}》已全部读完！`;
-      setTimeout(() => { readingStatusMsg.innerText = '✨ 点击句子即可查看翻译'; }, 3000);
-    }
   }
 
   function prevChapter() {
@@ -802,7 +1048,7 @@
       renderCurrentChapter(); 
     } else { 
       readingStatusMsg.innerText = '已经是第一部分'; 
-      setTimeout(() => { readingStatusMsg.innerText = '✨ 点击句子即可查看翻译'; }, 800); 
+      setTimeout(() => { readingStatusMsg.innerText = '✨ 点击单词查询释义/整句翻译'; }, 800); 
     }
   }
   
@@ -813,7 +1059,7 @@
       renderCurrentChapter(); 
     } else { 
       readingStatusMsg.innerText = '🎯 已是最后一部分，试试其他作品吧~'; 
-      setTimeout(() => { readingStatusMsg.innerText = '✨ 点击句子即可查看翻译'; }, 1500); 
+      setTimeout(() => { readingStatusMsg.innerText = '✨ 点击单词查询释义/整句翻译'; }, 1500); 
     }
   }
 
@@ -931,6 +1177,7 @@
   renderCurrentChapter();
   renderBookShelf();
   updateGlobalProgress();
+  updateVocabCountDisplay();
   
   loadOneHundredYears();
   
