@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, maximum-scale=1.5">
-  <title>Lectura de Espe </title>
+  <title>Lectura de Espe</title>
   <style>
     * {
       margin: 0;
@@ -207,7 +207,6 @@
       margin-bottom: 1rem;
       color: #6A5C4E;
     }
-    /* 作家分组样式 */
     .author-group {
       margin-bottom: 1.8rem;
     }
@@ -337,7 +336,7 @@
 
   <div class="action-bar">
     <button class="mark-btn" id="markChapterBtn">✅ 标记本章读完</button>
-    <div class="status-message" id="readingStatusMsg">✨ 点击诗句即可查看中文翻译</div>
+    <div class="status-message" id="readingStatusMsg">✨ 点击西班牙语句子即可查看英文翻译</div>
   </div>
 
   <div class="book-shelf">
@@ -348,14 +347,9 @@
 
 <script>
   // ============================================================
-  // 作品数据库（原有全部保留）
-  // 包括：博尔赫斯、聂鲁达、洛尔迦、帕斯
-  // 新增：加西亚·马尔克斯《百年孤独》（从外部txt动态加载）
+  // 原有作品数据（博尔赫斯、聂鲁达、洛尔迦、帕斯）- 完全保留
   // ============================================================
-  
-  // ---------- 原有作品数据（完全保留）----------
   const STATIC_NOVEL_DATA = {
-    // ---------------- 博尔赫斯作品 ----------------
     "瞬息 / El instante": {
       author: "Jorge Luis Borges",
       type: "诗歌",
@@ -384,7 +378,6 @@
         { title: "终章", paragraphs: [{ sentences: [{ spanish: "Pasó otro año. Los centinelas notaron que el poeta no traía manuscrito. El rey lo vio con asombro; casi era otro. Algo (que no era el tiempo) le había surcado el rostro. Los ojos parecían mirar muy lejos o estar ciegos. El poeta pidió hablar a solas con el rey. Los esclavos se retiraron.", chinese: "又满了一年。王宫的守卫注意到诗人这次空手来到，没有手稿。国王见到了他不禁有点吃惊；他几乎成了另一个人。某些东西（并不是时间）在他脸上刻画了皱纹，改变了模样。他的眼睛仿佛望着老远的地方，或者瞎了。诗人请求同国王单独说几句话。奴隶们退了出去。" },{ spanish: "«¿Escribiste la oda?», preguntó el rey.", chinese: "“你写了颂歌没有？”国王问道。" },{ spanish: "«Sí», dijo tristemente el poeta. «Quiera Cristo Nuestro Señor impedírmelo.»", chinese: "“写了，”诗人悲哀地说。“但愿我主基督禁止我这么做。”" },{ spanish: "«¿Puedes repetirla?»", chinese: "“你能念念吗？”" },{ spanish: "«No me atrevo.»", chinese: "“我不敢。”" },{ spanish: "«Yo te doy el valor que te falta», dijo el rey.", chinese: "“我给你所欠缺的勇气，”国王宣称。" }] },{ sentences: [{ spanish: "El poeta dijo la oda. Era una sola línea.", chinese: "诗人念出那篇诗。只有一行。" },{ spanish: "El poeta y el rey no se atrevieron a repetirla en voz alta; la saborearon en silencio, como una plegaria secreta o una maldición. El rey estaba tan maravillado y tan abrumado como el poeta. Se miraron, muy pálidos.", chinese: "诗人和国王都没有大声念出那行诗的勇气，只在嘴里品味，仿佛它是秘密的祈祷或者诅咒。国王诧异和震惊的程度不下于诗人。两人对瞅着，面色惨白。" },{ spanish: "«En los años de mi juventud», dijo el rey, «navegué hacia el Occidente. En una isla vi perros de plata que daban muerte a jabalíes de oro. En otra isla olimos el fruto de los árboles de la magia y quedamos saciados. En una isla vi murallas de fuego. En la más lejana, un río que subía al cielo y en el río había peces y barcas. Ésas son cosas maravillosas, pero no pueden compararse con tu poema, que de algún modo las encierra. ¿Qué sortilegio te lo ha dictado?»", chinese: "“我年轻的时候，”国王说，“曾向西方航行。在一个岛上，我看到银的猪犬咬死金的野猪。在另一个岛上，我们闻到魔苹果的香味肚子就饱了。在一个岛上，我见到火焰的城墙。在一个最远的岛上，有一个通天河，河里有鱼，河上有船。这些都是神奇的事物，但不能同你的诗相比，因为你的诗仿佛把它们全包括在内了。什么巫术使你写出来的？”" },{ spanish: "«En el alba», dijo el poeta, «me desperté diciendo palabras que no comprendí al principio. Esas palabras eran un poema. Sentí que había cometido un pecado que el Espíritu Santo no perdona.»", chinese: "“天快亮时，”诗人说，“我一觉醒来，念念有词，开始自己也不明白什么意思。那几个字就是一篇诗。我觉得自己犯了天主不会饶恕的罪孽。”" },{ spanish: "«El que ahora compartimos los dos», dijo el rey en voz baja. «El de conocer la Belleza, que es un don vedado a los hombres. Ahora nos toca expiar. Te di un espejo y una máscara de oro; aquí tienes el tercer regalo, que será el último.»", chinese: "“正是我们两人现在共犯的罪孽，”国王悄声说。“了解到美的罪孽，因为这是禁止人们问津的。现在我们该为之付出代价了。我赐给你一面镜子和一个金面具；这里是第三件，也就是最后的一件礼物。”" },{ spanish: "Le puso en la diestra un puñal.", chinese: "国王拿一把匕首放在诗人右手。" }] },{ sentences: [{ spanish: "Del poeta sabemos que al salir del palacio se dio muerte; del rey, que es un mendigo que recorre los caminos de Irlanda, que fue su reino, y que no ha repetido nunca el poema.", chinese: "据我们所知，诗人一出王宫就自杀了；国王成了乞丐，在他的王国爱尔兰四处流浪，再也没有念过那句诗。" }] }] }
       ]
     },
-    // ---------------- 聂鲁达: Poema XX ----------------
     "Poema XX": {
       author: "Pablo Neruda",
       type: "诗歌",
@@ -409,7 +402,6 @@
         ]
       }]
     },
-    // ---------------- 洛尔迦: La Guitarra ----------------
     "La Guitarra": {
       author: "Federico García Lorca",
       type: "诗歌",
@@ -429,7 +421,6 @@
         ]
       }]
     },
-    // ---------------- 帕斯: El Instante ----------------
     "El Instante": {
       author: "Octavio Paz",
       type: "诗歌",
@@ -447,206 +438,24 @@
     }
   };
 
-  // ---------- 新增：百年孤独（动态加载）----------
+  // ============================================================
+  // 百年孤独：动态加载，按非空行对齐
+  // 核心逻辑：过滤掉空行后，西语第n个非空行 ↔ 英文第n个非空行
+  // 遇到纯数字行（章节号）时切分章节
+  // ============================================================
   const ONE_HUNDRED_YEARS_CONFIG = {
-    name: "Cien años de soledad",
+    name: "Cien años de soledad / One Hundred Years of Solitude",
     author: "Gabriel García Márquez",
     spanishFile: "cien_anos_soledad.txt",
-    chineseFile: "hundredyearsofsolitude.txt",
+    englishFile: "hundredyearsofsolitude.txt",
     isDynamic: true
   };
 
-  // 存储动态加载的章节数据
   let dynamicChapters = [];
   let isLoadingDynamic = false;
   let dynamicLoadError = null;
-
-  // 合并所有作品（静态 + 动态将后续加入）
   let NOVEL_DATA = { ...STATIC_NOVEL_DATA };
 
-  // 解析西语文件函数
-  function parseSpanishFile(content) {
-    const lines = content.split(/\r?\n/);
-    const chapters = [];
-    let currentChapter = null;
-    let currentParagraph = '';
-    let i = 0;
-    
-    while (i < lines.length) {
-      const line = lines[i];
-      
-      if (line && /^\d+$/.test(line.trim())) {
-        if (currentChapter && currentParagraph.trim()) {
-          currentChapter.paragraphs.push(currentParagraph.trim());
-          currentParagraph = '';
-        }
-        if (currentChapter && currentChapter.paragraphs.length > 0) {
-          chapters.push(currentChapter);
-        }
-        currentChapter = {
-          title: `Capítulo ${line.trim()}`,
-          paragraphs: []
-        };
-        i++;
-        while (i < lines.length && lines[i].trim() === '') i++;
-        continue;
-      }
-      
-      if (line && line.trim().length > 0) {
-        const cleanedLine = line.trim();
-        if (currentParagraph === '') {
-          currentParagraph = cleanedLine;
-        } else {
-          if (cleanedLine && /^[a-záéíóúüñ]/i.test(cleanedLine.charAt(0))) {
-            currentParagraph += ' ' + cleanedLine;
-          } else {
-            if (currentParagraph) {
-              currentChapter.paragraphs.push(currentParagraph);
-            }
-            currentParagraph = cleanedLine;
-          }
-        }
-      } else if (line === '' || line === null) {
-        if (currentParagraph && currentParagraph.trim()) {
-          currentChapter.paragraphs.push(currentParagraph.trim());
-          currentParagraph = '';
-        }
-      }
-      i++;
-    }
-    
-    if (currentChapter) {
-      if (currentParagraph.trim()) {
-        currentChapter.paragraphs.push(currentParagraph.trim());
-      }
-      if (currentChapter.paragraphs.length > 0) {
-        chapters.push(currentChapter);
-      }
-    }
-    return chapters;
-  }
-
-  // 解析中文文件函数
-  function parseChineseFile(content) {
-    const lines = content.split(/\r?\n/);
-    const chapters = [];
-    let currentChapter = null;
-    let currentParagraph = '';
-    let i = 0;
-    
-    while (i < lines.length) {
-      const line = lines[i];
-      
-      if (line === '' || line === null) {
-        if (currentParagraph && currentParagraph.trim()) {
-          if (currentChapter) {
-            currentChapter.paragraphs.push(currentParagraph.trim());
-          }
-          currentParagraph = '';
-        }
-        if (i + 1 < lines.length && lines[i+1] && lines[i+1].trim().length > 0) {
-          if (currentChapter && currentChapter.paragraphs.length > 0) {
-            chapters.push(currentChapter);
-          }
-          currentChapter = {
-            title: `第${chapters.length + 1}章`,
-            paragraphs: []
-          };
-          i++;
-        }
-        i++;
-        continue;
-      }
-      
-      const cleanedLine = line.trim();
-      if (cleanedLine.length > 0) {
-        if (currentParagraph === '') {
-          currentParagraph = cleanedLine;
-        } else {
-          if (cleanedLine && /^[a-zA-Z\u4e00-\u9fa5]/.test(cleanedLine.charAt(0))) {
-            currentParagraph += ' ' + cleanedLine;
-          } else {
-            if (currentParagraph) {
-              currentChapter.paragraphs.push(currentParagraph);
-            }
-            currentParagraph = cleanedLine;
-          }
-        }
-      }
-      i++;
-    }
-    
-    if (currentChapter) {
-      if (currentParagraph.trim()) {
-        currentChapter.paragraphs.push(currentParagraph.trim());
-      }
-      if (currentChapter.paragraphs.length > 0) {
-        chapters.push(currentChapter);
-      }
-    }
-    return chapters;
-  }
-
-  // 拆分句子
-  function splitIntoSentences(text) {
-    if (!text) return [];
-    const sentences = text.split(/(?<=[.?!;:])|(?<=[。？！；：])/g);
-    return sentences.filter(s => s.trim().length > 0);
-  }
-
-  // 合并章节
-  function mergeChapters(spanishChapters, chineseChapters) {
-    const maxChapters = Math.min(spanishChapters.length, chineseChapters.length);
-    const result = [];
-    
-    for (let i = 0; i < maxChapters; i++) {
-      const spanishChap = spanishChapters[i];
-      const chineseChap = chineseChapters[i];
-      const paragraphs = [];
-      
-      const maxParas = Math.min(spanishChap.paragraphs.length, chineseChap.paragraphs.length);
-      
-      for (let j = 0; j < maxParas; j++) {
-        const spanishPara = spanishChap.paragraphs[j];
-        const chinesePara = chineseChap.paragraphs[j];
-        
-        const spanishSentences = splitIntoSentences(spanishPara);
-        const chineseSentences = splitIntoSentences(chinesePara);
-        
-        const sentences = [];
-        const maxSent = Math.min(spanishSentences.length, chineseSentences.length);
-        
-        for (let k = 0; k < maxSent; k++) {
-          sentences.push({
-            spanish: spanishSentences[k].trim(),
-            chinese: chineseSentences[k].trim()
-          });
-        }
-        
-        if (spanishSentences.length > maxSent) {
-          for (let k = maxSent; k < spanishSentences.length; k++) {
-            sentences.push({
-              spanish: spanishSentences[k].trim(),
-              chinese: chineseSentences[maxSent - 1] || '（待补充翻译）'
-            });
-          }
-        }
-        
-        if (sentences.length > 0) {
-          paragraphs.push({ sentences });
-        }
-      }
-      
-      result.push({
-        title: spanishChap.title || `Capítulo ${i + 1}`,
-        paragraphs: paragraphs
-      });
-    }
-    
-    return result;
-  }
-
-  // 加载百年孤独
   async function loadOneHundredYears() {
     isLoadingDynamic = true;
     dynamicLoadError = null;
@@ -656,23 +465,101 @@
       if (!spanishResponse.ok) throw new Error(`无法加载西语文件: ${spanishResponse.status}`);
       const spanishContent = await spanishResponse.text();
       
-      const chineseResponse = await fetch(ONE_HUNDRED_YEARS_CONFIG.chineseFile);
-      if (!chineseResponse.ok) throw new Error(`无法加载中文文件: ${chineseResponse.status}`);
-      const chineseContent = await chineseResponse.text();
+      const englishResponse = await fetch(ONE_HUNDRED_YEARS_CONFIG.englishFile);
+      if (!englishResponse.ok) throw new Error(`无法加载英文文件: ${englishResponse.status}`);
+      const englishContent = await englishResponse.text();
       
-      const spanishChapters = parseSpanishFile(spanishContent);
-      const chineseChapters = parseChineseFile(chineseContent);
+      // 获取所有行
+      const spanishRawLines = spanishContent.split(/\r?\n/);
+      const englishRawLines = englishContent.split(/\r?\n/);
       
-      dynamicChapters = mergeChapters(spanishChapters, chineseChapters);
+      // 过滤空行：只保留有实质内容的行（trim后不为空）
+      const spanishNonEmpty = [];
+      const englishNonEmpty = [];
       
-      // 将百年孤独添加到 NOVEL_DATA
+      for (const line of spanishRawLines) {
+        if (line.trim() !== "") {
+          spanishNonEmpty.push(line);
+        }
+      }
+      
+      for (const line of englishRawLines) {
+        if (line.trim() !== "") {
+          englishNonEmpty.push(line);
+        }
+      }
+      
+      console.log(`西语非空行数: ${spanishNonEmpty.length}, 英文非空行数: ${englishNonEmpty.length}`);
+      
+      // 取较小的数量（理论上应该相等）
+      const minLines = Math.min(spanishNonEmpty.length, englishNonEmpty.length);
+      
+      if (Math.abs(spanishNonEmpty.length - englishNonEmpty.length) > 10) {
+        console.warn(`警告：行数差异较大！西语=${spanishNonEmpty.length}, 英文=${englishNonEmpty.length}`);
+      }
+      
+      // 按章节分组：遇到纯数字行（章节号）时切分
+      const chapters = [];
+      let currentChapterLines = [];
+      
+      for (let i = 0; i < minLines; i++) {
+        const spanishLine = spanishNonEmpty[i];
+        const englishLine = englishNonEmpty[i];
+        
+        // 检测西语章节号：行内容为纯数字（如 "1", "2", "10"）
+        if (/^\d+$/.test(spanishLine.trim())) {
+          // 保存上一章
+          if (currentChapterLines.length > 0) {
+            chapters.push({
+              title: `Capítulo ${spanishLine.trim()} / Chapter ${spanishLine.trim()}`,
+              lines: currentChapterLines
+            });
+            currentChapterLines = [];
+          }
+          continue;
+        }
+        
+        // 存储这一行的对应对
+        currentChapterLines.push({
+          spanish: spanishLine,
+          english: englishLine
+        });
+      }
+      
+      // 保存最后一章
+      if (currentChapterLines.length > 0) {
+        chapters.push({
+          title: `Capítulo ${chapters.length + 1} / Chapter ${chapters.length + 1}`,
+          lines: currentChapterLines
+        });
+      }
+      
+      console.log(`解析完成，共 ${chapters.length} 章`);
+      
+      // 转换为网站所需的章节格式（每一行作为一个独立的"句子"）
+      dynamicChapters = chapters.map(chap => {
+        const paragraphs = [];
+        for (const line of chap.lines) {
+          paragraphs.push({
+            sentences: [{
+              spanish: line.spanish,
+              chinese: line.english  // 英文翻译放在chinese字段
+            }]
+          });
+        }
+        return {
+          title: chap.title,
+          paragraphs: paragraphs
+        };
+      });
+      
+      // 添加到全局数据
       NOVEL_DATA[ONE_HUNDRED_YEARS_CONFIG.name] = {
         author: ONE_HUNDRED_YEARS_CONFIG.author,
         type: "长篇小说",
         chapters: dynamicChapters
       };
       
-      // 初始化进度
       if (!readingProgress[ONE_HUNDRED_YEARS_CONFIG.name]) {
         readingProgress[ONE_HUNDRED_YEARS_CONFIG.name] = {
           completedChapters: new Array(dynamicChapters.length).fill(false),
@@ -681,11 +568,8 @@
       }
       
       isLoadingDynamic = false;
-      
-      // 重新渲染书桌
       renderBookShelf();
       
-      // 如果当前选中的是百年孤独，刷新显示
       if (currentBookId === ONE_HUNDRED_YEARS_CONFIG.name) {
         renderCurrentChapter();
       }
@@ -694,13 +578,13 @@
       console.error('加载百年孤独失败:', error);
       dynamicLoadError = error;
       isLoadingDynamic = false;
-      
-      // 在书桌中显示错误信息
       renderBookShelf();
     }
   }
 
-  // 读取/初始化进度
+  // ============================================================
+  // 原有的阅读进度和渲染逻辑（完全保留）
+  // ============================================================
   let readingProgress = {};
   for (const [bookName, bookData] of Object.entries(STATIC_NOVEL_DATA)) {
     readingProgress[bookName] = {
@@ -740,7 +624,7 @@
       if (currentBookId === ONE_HUNDRED_YEARS_CONFIG.name && isLoadingDynamic) {
         readingContainer.innerHTML = '<div class="loading-indicator">📖 正在加载《百年孤独》全文，请稍候...</div>';
       } else if (currentBookId === ONE_HUNDRED_YEARS_CONFIG.name && dynamicLoadError) {
-        readingContainer.innerHTML = `<div class="loading-indicator" style="color: #c44;">⚠️ 加载失败: ${dynamicLoadError.message}<br><br>请确保以下文件已上传到GitHub仓库:<br>- ${ONE_HUNDRED_YEARS_CONFIG.spanishFile}<br>- ${ONE_HUNDRED_YEARS_CONFIG.chineseFile}<br><br><button onclick="location.reload()" style="padding:0.5rem 1rem; cursor:pointer;">重试</button></div>`;
+        readingContainer.innerHTML = `<div class="loading-indicator" style="color: #c44;">⚠️ 加载失败: ${dynamicLoadError.message}<br><br>请确保以下文件已上传到GitHub仓库:<br>- ${ONE_HUNDRED_YEARS_CONFIG.spanishFile}<br>- ${ONE_HUNDRED_YEARS_CONFIG.englishFile}<br><br><button onclick="location.reload()" style="padding:0.5rem 1rem; cursor:pointer;">重试</button></div>`;
       } else {
         readingContainer.innerHTML = '<div style="text-align:center; padding:3rem;">📭 章节缺失</div>';
       }
@@ -785,13 +669,13 @@
   }
 
   let activeTooltip = null;
-  function showTranslationTooltip(event, chineseText) {
+  function showTranslationTooltip(event, englishText) {
     if (activeTooltip) { activeTooltip.remove(); activeTooltip = null; }
     const targetSpan = event.currentTarget;
     const rect = targetSpan.getBoundingClientRect();
     const tooltip = document.createElement('div');
     tooltip.className = 'translation-tooltip';
-    tooltip.textContent = chineseText;
+    tooltip.textContent = englishText;
     document.body.appendChild(tooltip);
     const tooltipRect = tooltip.getBoundingClientRect();
     let left = rect.left + window.scrollX;
@@ -814,7 +698,7 @@
     if (!progress) return;
     if (progress.completedChapters[currentChapterIdx]) {
       readingStatusMsg.innerText = '📌 本章之前已经标记过啦！';
-      setTimeout(() => { readingStatusMsg.innerText = '✨ 点击诗句即可查看中文翻译'; }, 1500);
+      setTimeout(() => { readingStatusMsg.innerText = '✨ 点击西班牙语句子即可查看英文翻译'; }, 1500);
       return;
     }
     progress.completedChapters[currentChapterIdx] = true;
@@ -822,13 +706,13 @@
     markBtn.classList.add('completed');
     markBtn.innerHTML = '✅ 本章已完成';
     readingStatusMsg.innerText = '🎉 章节进度已更新！继续阅读吧。';
-    setTimeout(() => { readingStatusMsg.innerText = '✨ 点击诗句即可查看中文翻译'; }, 2000);
+    setTimeout(() => { readingStatusMsg.innerText = '✨ 点击西班牙语句子即可查看英文翻译'; }, 2000);
     updateGlobalProgress();
     renderBookShelf();
     const allCompleted = progress.completedChapters.every(v => v === true);
     if (allCompleted) {
       readingStatusMsg.innerText = `🏆 恭喜！《${currentBookId}》已全部读完！`;
-      setTimeout(() => { readingStatusMsg.innerText = '✨ 点击诗句即可查看中文翻译'; }, 3000);
+      setTimeout(() => { readingStatusMsg.innerText = '✨ 点击西班牙语句子即可查看英文翻译'; }, 3000);
     }
   }
 
@@ -838,8 +722,8 @@
       currentChapterIdx--; 
       renderCurrentChapter(); 
     } else { 
-      readingStatusMsg.innerText = '已经是第一部分'; 
-      setTimeout(() => { readingStatusMsg.innerText = '✨ 点击诗句即可查看中文翻译'; }, 800); 
+      readingStatusMsg.innerText = '已经是第一章'; 
+      setTimeout(() => { readingStatusMsg.innerText = '✨ 点击西班牙语句子即可查看英文翻译'; }, 800); 
     }
   }
   
@@ -849,8 +733,8 @@
       currentChapterIdx++; 
       renderCurrentChapter(); 
     } else { 
-      readingStatusMsg.innerText = '🎯 已是最后一部分，试试其他作品吧~'; 
-      setTimeout(() => { readingStatusMsg.innerText = '✨ 点击诗句即可查看中文翻译'; }, 1500); 
+      readingStatusMsg.innerText = '🎯 已是最后一章'; 
+      setTimeout(() => { readingStatusMsg.innerText = '✨ 点击西班牙语句子即可查看英文翻译'; }, 1500); 
     }
   }
 
@@ -894,7 +778,6 @@
     }
   }
 
-  // 按作家分组渲染书桌
   function renderBookShelf() {
     const grouped = {};
     for (const [bookName, bookData] of Object.entries(NOVEL_DATA)) {
@@ -948,7 +831,6 @@
       bookShelfList.appendChild(groupDiv);
     }
     
-    // 如果百年孤独还在加载，显示提示
     if (isLoadingDynamic && !NOVEL_DATA[ONE_HUNDRED_YEARS_CONFIG.name]) {
       const loadingDiv = document.createElement('div');
       loadingDiv.className = 'author-group';
@@ -971,7 +853,6 @@
   renderBookShelf();
   updateGlobalProgress();
   
-  // 开始加载百年孤独
   loadOneHundredYears();
   
   window.addEventListener('beforeunload', () => saveProgressToLocal());
