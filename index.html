@@ -336,7 +336,7 @@
 
   <div class="action-bar">
     <button class="mark-btn" id="markChapterBtn">✅ 标记本章读完</button>
-    <div class="status-message" id="readingStatusMsg">✨ 点击西班牙语句子即可查看英文翻译</div>
+    <div class="status-message" id="readingStatusMsg">✨ 点击西班牙语句子即可查看翻译</div>
   </div>
 
   <div class="book-shelf">
@@ -698,7 +698,7 @@
     if (!progress) return;
     if (progress.completedChapters[currentChapterIdx]) {
       readingStatusMsg.innerText = '📌 本章之前已经标记过啦！';
-      setTimeout(() => { readingStatusMsg.innerText = '✨ 点击西班牙语句子即可查看英文翻译'; }, 1500);
+      setTimeout(() => { readingStatusMsg.innerText = '✨ 点击西班牙语句子即可查看翻译'; }, 1500);
       return;
     }
     progress.completedChapters[currentChapterIdx] = true;
@@ -706,13 +706,13 @@
     markBtn.classList.add('completed');
     markBtn.innerHTML = '✅ 本章已完成';
     readingStatusMsg.innerText = '🎉 章节进度已更新！继续阅读吧。';
-    setTimeout(() => { readingStatusMsg.innerText = '✨ 点击西班牙语句子即可查看英文翻译'; }, 2000);
+    setTimeout(() => { readingStatusMsg.innerText = '✨ 点击西班牙语句子即可查看翻译'; }, 2000);
     updateGlobalProgress();
     renderBookShelf();
     const allCompleted = progress.completedChapters.every(v => v === true);
     if (allCompleted) {
       readingStatusMsg.innerText = `🏆 恭喜！《${currentBookId}》已全部读完！`;
-      setTimeout(() => { readingStatusMsg.innerText = '✨ 点击西班牙语句子即可查看英文翻译'; }, 3000);
+      setTimeout(() => { readingStatusMsg.innerText = '✨ 点击西班牙语句子即可查看翻译'; }, 3000);
     }
   }
 
@@ -723,7 +723,7 @@
       renderCurrentChapter(); 
     } else { 
       readingStatusMsg.innerText = '已经是第一章'; 
-      setTimeout(() => { readingStatusMsg.innerText = '✨ 点击西班牙语句子即可查看英文翻译'; }, 800); 
+      setTimeout(() => { readingStatusMsg.innerText = '✨ 点击西班牙语句子即可查看翻译'; }, 800); 
     }
   }
   
@@ -734,7 +734,7 @@
       renderCurrentChapter(); 
     } else { 
       readingStatusMsg.innerText = '🎯 已是最后一章'; 
-      setTimeout(() => { readingStatusMsg.innerText = '✨ 点击西班牙语句子即可查看英文翻译'; }, 1500); 
+      setTimeout(() => { readingStatusMsg.innerText = '✨ 点击西班牙语句子即可查看翻译'; }, 1500); 
     }
   }
 
