@@ -599,68 +599,71 @@
   }
 
   // ============================================================
-  // MyMemory API 查词函数（修复版：正确提取单词翻译）
+  // WordReference 网页抓取查词（最终稳定版）
   // ============================================================
   async function lookupWordOnGlosbe(word) {
     if (glossCache[word]) return glossCache[word];
     
-    const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(word)}&langpair=es|en&key=sm_yZ-Yl1gNikmbEE41wE36qYeLUj1EpDUf7kgT6B0uC0kn3a1tosbRq8eUSJsfRz4H11FpN9wKfYMiGP6OUEvr48mVGq2KdY3uuA`;
+    // 使用免费 CORS 代理 + WordReference 西->英页面
+    const proxy = 'https://cors-anywhere.herokuapp.com/';
+    const target = `https://www.wordreference.com/es/en/${encodeURIComponent(word)}`;
+    const url = proxy + target;
     
     try {
-      const response = await fetch(url);
-      const data = await response.json();
+      console.log(`🔍 查词: ${word}`);
+      const response = await fetch(url, {
+        headers: {
+          'Origin': 'https://www.wordreference.com',
+          'X-Requested-With': 'XMLHttpRequest'
+        }
+      });
       
-      if (data && data.responseData && data.responseData.translatedText) {
-        let translatedText = data.responseData.translatedText;
-        
-        // 如果返回的翻译和原词一样，或者包含???(未找到标记)
-        if (translatedText === word || translatedText.includes('???') || translatedText.includes('no translation found')) {
-          console.log(`⚠️ 未找到翻译: ${word}`);
-          glossCache[word] = [];
-          return [];
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+      
+      const html = await response.text();
+      
+      // 解析翻译：查找表格中的英文翻译
+      const translations = [];
+      
+      // 方法1: 查找 "toR" 表格中的英文（最准确的翻译）
+      const toRRegex = /<td class="toR">\s*<a[^>]*>([^<]+)<\/a>\s*<\/td>/gi;
+      let match;
+      while ((match = toRRegex.exec(html)) !== null) {
+        let trans = match[1].trim().toLowerCase();
+        if (trans && !translations.includes(trans) && trans !== word) {
+          translations.push(trans);
         }
-        
-        // 尝试提取核心翻译
-        let translations = [];
-        
-        // 方法1: 如果翻译结果包含原词（说明是短语或整句翻译），尝试提取
-        if (translatedText.toLowerCase().includes(word.toLowerCase())) {
-          // 替换原词为空，得到剩余部分
-          let remaining = translatedText.replace(new RegExp(word, 'gi'), '').trim();
-          // 如果剩余部分是简短的词，使用它
-          if (remaining && remaining.length < 30 && !remaining.includes(' ')) {
-            translations = [remaining];
-          } else {
-            // 否则返回整个翻译（可能是短语）
-            translations = [translatedText];
-          }
-        } else {
-          // 方法2: 按常见分隔符拆分
-          let candidates = translatedText.split(/[,;、，；]/);
-          for (let cand of candidates) {
-            let clean = cand.trim();
-            // 只保留简短的翻译（少于30字符，且不包含多余空格）
-            if (clean && clean.length > 0 && clean.length < 30 && !clean.includes('  ')) {
-              translations.push(clean);
-            }
+      }
+      
+      // 方法2: 如果没找到，查找 "FrTo" 区域的翻译
+      if (translations.length === 0) {
+        const frToRegex = /<em class="FrTo">([^<]+)<\/em>/gi;
+        while ((match = frToRegex.exec(html)) !== null) {
+          let trans = match[1].trim().toLowerCase();
+          if (trans && !translations.includes(trans) && trans !== word && trans.length < 40) {
+            translations.push(trans);
           }
         }
-        
-        // 去重
-        translations = [...new Set(translations)];
-        
-        if (translations.length > 0) {
-          glossCache[word] = translations.slice(0, 5);
-          console.log(`✅ 查词成功: ${word} → ${glossCache[word].join(', ')}`);
-          return glossCache[word];
+      }
+      
+      // 方法3: 查找 "toW" 表格
+      if (translations.length === 0) {
+        const toWRegex = /<td class="toW">\s*<a[^>]*>([^<]+)<\/a>\s*<\/td>/gi;
+        while ((match = toWRegex.exec(html)) !== null) {
+          let trans = match[1].trim().toLowerCase();
+          if (trans && !translations.includes(trans) && trans !== word) {
+            translations.push(trans);
+          }
         }
-        
-        // 方法3: 如果上面都没提取到，直接返回翻译结果（限制长度）
-        if (translatedText && translatedText.length < 50) {
-          glossCache[word] = [translatedText];
-          console.log(`✅ 查词成功(全文): ${word} → ${translatedText}`);
-          return [translatedText];
-        }
+      }
+      
+      if (translations.length > 0) {
+        const unique = [...new Set(translations)].slice(0, 5);
+        glossCache[word] = unique;
+        console.log(`✅ ${word} → ${unique.join(', ')}`);
+        return unique;
       }
       
       console.log(`⚠️ 未找到翻译: ${word}`);
@@ -668,10 +671,11 @@
       return [];
       
     } catch (error) {
-      console.error(`❌ MyMemory查词失败 (${word}):`, error);
+      console.error(`❌ 查词失败 (${word}):`, error);
       return [];
     }
   }
+  
   // ============================================================
   // 通用弹窗管理（点击页面空白处关闭）
   // ============================================================
