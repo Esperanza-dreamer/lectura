@@ -207,7 +207,6 @@
       margin-bottom: 1rem;
       color: #6A5C4E;
     }
-    /* 作家分组样式 */
     .author-group {
       margin-bottom: 1.8rem;
     }
@@ -337,7 +336,7 @@
 
   <div class="action-bar">
     <button class="mark-btn" id="markChapterBtn">✅ 标记本章读完</button>
-    <div class="status-message" id="readingStatusMsg">✨ 点击诗句即可查看中文翻译</div>
+    <div class="status-message" id="readingStatusMsg">✨ 点击句子即可查看翻译</div>
   </div>
 
   <div class="book-shelf">
@@ -348,14 +347,9 @@
 
 <script>
   // ============================================================
-  // 作品数据库（原有全部保留）
-  // 包括：博尔赫斯、聂鲁达、洛尔迦、帕斯
-  // 新增：加西亚·马尔克斯《百年孤独》（从外部txt动态加载）
+  // 静态作品数据（博尔赫斯、聂鲁达、洛尔迦、帕斯 - 完整保留）
   // ============================================================
-  
-  // ---------- 原有作品数据（完全保留）----------
   const STATIC_NOVEL_DATA = {
-    // ---------------- 博尔赫斯作品 ----------------
     "瞬息 / El instante": {
       author: "Jorge Luis Borges",
       type: "诗歌",
@@ -384,70 +378,58 @@
         { title: "终章", paragraphs: [{ sentences: [{ spanish: "Pasó otro año. Los centinelas notaron que el poeta no traía manuscrito. El rey lo vio con asombro; casi era otro. Algo (que no era el tiempo) le había surcado el rostro. Los ojos parecían mirar muy lejos o estar ciegos. El poeta pidió hablar a solas con el rey. Los esclavos se retiraron.", chinese: "又满了一年。王宫的守卫注意到诗人这次空手来到，没有手稿。国王见到了他不禁有点吃惊；他几乎成了另一个人。某些东西（并不是时间）在他脸上刻画了皱纹，改变了模样。他的眼睛仿佛望着老远的地方，或者瞎了。诗人请求同国王单独说几句话。奴隶们退了出去。" },{ spanish: "«¿Escribiste la oda?», preguntó el rey.", chinese: "“你写了颂歌没有？”国王问道。" },{ spanish: "«Sí», dijo tristemente el poeta. «Quiera Cristo Nuestro Señor impedírmelo.»", chinese: "“写了，”诗人悲哀地说。“但愿我主基督禁止我这么做。”" },{ spanish: "«¿Puedes repetirla?»", chinese: "“你能念念吗？”" },{ spanish: "«No me atrevo.»", chinese: "“我不敢。”" },{ spanish: "«Yo te doy el valor que te falta», dijo el rey.", chinese: "“我给你所欠缺的勇气，”国王宣称。" }] },{ sentences: [{ spanish: "El poeta dijo la oda. Era una sola línea.", chinese: "诗人念出那篇诗。只有一行。" },{ spanish: "El poeta y el rey no se atrevieron a repetirla en voz alta; la saborearon en silencio, como una plegaria secreta o una maldición. El rey estaba tan maravillado y tan abrumado como el poeta. Se miraron, muy pálidos.", chinese: "诗人和国王都没有大声念出那行诗的勇气，只在嘴里品味，仿佛它是秘密的祈祷或者诅咒。国王诧异和震惊的程度不下于诗人。两人对瞅着，面色惨白。" },{ spanish: "«En los años de mi juventud», dijo el rey, «navegué hacia el Occidente. En una isla vi perros de plata que daban muerte a jabalíes de oro. En otra isla olimos el fruto de los árboles de la magia y quedamos saciados. En una isla vi murallas de fuego. En la más lejana, un río que subía al cielo y en el río había peces y barcas. Ésas son cosas maravillosas, pero no pueden compararse con tu poema, que de algún modo las encierra. ¿Qué sortilegio te lo ha dictado?»", chinese: "“我年轻的时候，”国王说，“曾向西方航行。在一个岛上，我看到银的猪犬咬死金的野猪。在另一个岛上，我们闻到魔苹果的香味肚子就饱了。在一个岛上，我见到火焰的城墙。在一个最远的岛上，有一个通天河，河里有鱼，河上有船。这些都是神奇的事物，但不能同你的诗相比，因为你的诗仿佛把它们全包括在内了。什么巫术使你写出来的？”" },{ spanish: "«En el alba», dijo el poeta, «me desperté diciendo palabras que no comprendí al principio. Esas palabras eran un poema. Sentí que había cometido un pecado que el Espíritu Santo no perdona.»", chinese: "“天快亮时，”诗人说，“我一觉醒来，念念有词，开始自己也不明白什么意思。那几个字就是一篇诗。我觉得自己犯了天主不会饶恕的罪孽。”" },{ spanish: "«El que ahora compartimos los dos», dijo el rey en voz baja. «El de conocer la Belleza, que es un don vedado a los hombres. Ahora nos toca expiar. Te di un espejo y una máscara de oro; aquí tienes el tercer regalo, que será el último.»", chinese: "“正是我们两人现在共犯的罪孽，”国王悄声说。“了解到美的罪孽，因为这是禁止人们问津的。现在我们该为之付出代价了。我赐给你一面镜子和一个金面具；这里是第三件，也就是最后的一件礼物。”" },{ spanish: "Le puso en la diestra un puñal.", chinese: "国王拿一把匕首放在诗人右手。" }] },{ sentences: [{ spanish: "Del poeta sabemos que al salir del palacio se dio muerte; del rey, que es un mendigo que recorre los caminos de Irlanda, que fue su reino, y que no ha repetido nunca el poema.", chinese: "据我们所知，诗人一出王宫就自杀了；国王成了乞丐，在他的王国爱尔兰四处流浪，再也没有念过那句诗。" }] }] }
       ]
     },
-    // ---------------- 聂鲁达: Poema XX ----------------
     "Poema XX": {
       author: "Pablo Neruda",
       type: "诗歌",
-      chapters: [{
-        title: "Poema XX",
-        paragraphs: [
-          { sentences: [{ spanish: "Puedo escribir los versos más tristes esta noche.", chinese: "今夜我可以写出最哀伤的诗句。" },{ spanish: "Escribir, por ejemplo: 'La noche está estrellada,", chinese: "写，譬如说，'夜缀满繁星，" },{ spanish: "y tiritan, azules, los astros, a lo lejos'.", chinese: "星星在远方，湛蓝地颤抖。'" }] },
-          { sentences: [{ spanish: "El viento de la noche gira en el cielo y canta.", chinese: "夜风在天空里打转并歌唱。" },{ spanish: "Puedo escribir los versos más tristes esta noche.", chinese: "今夜我可以写出最哀伤的诗句。" }] },
-          { sentences: [{ spanish: "Yo la quise, y a veces ella también me quiso.", chinese: "我爱过她，有时她也爱过我。" },{ spanish: "En las noches como ésta la tuve entre mis brazos.", chinese: "多少个像今晚的夜里，我将她拥入怀中。" }] },
-          { sentences: [{ spanish: "La besé tantas veces bajo el cielo infinito.", chinese: "在无垠的天空下，我吻过她无数次。" },{ spanish: "Ella me quiso, a veces yo también la quería.", chinese: "她爱过我，有时我也爱过她。" }] },
-          { sentences: [{ spanish: "Cómo no haber amado sus grandes ojos fijos.", chinese: "怎么会不爱上她凝视的深邃眼眸。" },{ spanish: "Puedo escribir los versos más tristes esta noche.", chinese: "今夜我可以写出最哀伤的诗句。" }] },
-          { sentences: [{ spanish: "Pensar que no la tengo. Sentir que la he perdido.", chinese: "想到我已失去她，感到我已失去她。" },{ spanish: "Oír la noche inmensa, más inmensa sin ella.", chinese: "聆听广阔的夜，因没有她而更加广阔。" }] },
-          { sentences: [{ spanish: "Y el verso cae al alma como al pasto el rocío.", chinese: "诗句滴落灵魂，如同露水落在草上。" },{ spanish: "Qué importa que mi amor no pudiera guardarla.", chinese: "我的爱不能留住她又有何妨。" }] },
-          { sentences: [{ spanish: "La noche está estrellada y ella no está conmigo.", chinese: "夜空缀满繁星，而她不在我身旁。" },{ spanish: "Eso es todo. A lo lejos alguien canta. A lo lejos.", chinese: "就这样。远处有人在唱歌。在远处。" }] },
-          { sentences: [{ spanish: "Mi alma no se contenta con haberla perdido.", chinese: "我的灵魂不甘于就此失去她。" },{ spanish: "Como para acercarla mi mirada la busca.", chinese: "我的视线追寻她，仿佛要靠近她。" }] },
-          { sentences: [{ spanish: "Mi corazón la busca, y ella no está conmigo.", chinese: "我的心在寻她，而她不在我身旁。" },{ spanish: "La misma noche que hace blanquear los mismos árboles.", chinese: "同样的夜，漂白了同样的树林。" }] },
-          { sentences: [{ spanish: "Nosotros, los de entonces, ya no somos los mismos.", chinese: "我们，当时的我们，已不再是同样的我们。" },{ spanish: "Ya no la quiero, es cierto, pero cuánto la quise.", chinese: "我已不爱她，这是确定的，但我曾多么爱她。" }] },
-          { sentences: [{ spanish: "Mi voz buscaba el viento para tocar su oído.", chinese: "我的声音曾寻找风，以触到她耳畔。" },{ spanish: "De otro. Será de otro. Como antes de mis besos.", chinese: "别人的。她将属于别人。如同属于我亲吻之前。" }] },
-          { sentences: [{ spanish: "Su voz, su cuerpo claro. Sus ojos infinitos.", chinese: "她的声音，她清澈的身体。她深邃的眼睛。" },{ spanish: "Ya no la quiero, es cierto, pero tal vez la quiero.", chinese: "我已不爱她，这是确定的，但也许我还爱她。" }] },
-          { sentences: [{ spanish: "Es tan corto el amor, y es tan largo el olvido.", chinese: "爱情如此短暂，而遗忘如此漫长。" },{ spanish: "Porque en noches como ésta la tuve entre mis brazos,", chinese: "因为多少个像今晚的夜里，我将她拥入怀中，" },{ spanish: "mi alma no se contenta con haberla perdido.", chinese: "我的灵魂不甘于就此失去她。" }] },
-          { sentences: [{ spanish: "Aunque éste sea el último dolor que ella me causa,", chinese: "即便这是她带给我的最后的痛苦，" },{ spanish: "y éstos sean los últimos versos que yo le escribo.", chinese: "即便这是我写给她的最后的诗句。" }] }
-        ]
-      }]
+      chapters: [{ title: "Poema XX", paragraphs: [
+        { sentences: [{ spanish: "Puedo escribir los versos más tristes esta noche.", chinese: "今夜我可以写出最哀伤的诗句。" },{ spanish: "Escribir, por ejemplo: 'La noche está estrellada,", chinese: "写，譬如说，'夜缀满繁星，" },{ spanish: "y tiritan, azules, los astros, a lo lejos'.", chinese: "星星在远方，湛蓝地颤抖。'" }] },
+        { sentences: [{ spanish: "El viento de la noche gira en el cielo y canta.", chinese: "夜风在天空里打转并歌唱。" },{ spanish: "Puedo escribir los versos más tristes esta noche.", chinese: "今夜我可以写出最哀伤的诗句。" }] },
+        { sentences: [{ spanish: "Yo la quise, y a veces ella también me quiso.", chinese: "我爱过她，有时她也爱过我。" },{ spanish: "En las noches como ésta la tuve entre mis brazos.", chinese: "多少个像今晚的夜里，我将她拥入怀中。" }] },
+        { sentences: [{ spanish: "La besé tantas veces bajo el cielo infinito.", chinese: "在无垠的天空下，我吻过她无数次。" },{ spanish: "Ella me quiso, a veces yo también la quería.", chinese: "她爱过我，有时我也爱过她。" }] },
+        { sentences: [{ spanish: "Cómo no haber amado sus grandes ojos fijos.", chinese: "怎么会不爱上她凝视的深邃眼眸。" },{ spanish: "Puedo escribir los versos más tristes esta noche.", chinese: "今夜我可以写出最哀伤的诗句。" }] },
+        { sentences: [{ spanish: "Pensar que no la tengo. Sentir que la he perdido.", chinese: "想到我已失去她，感到我已失去她。" },{ spanish: "Oír la noche inmensa, más inmensa sin ella.", chinese: "聆听广阔的夜，因没有她而更加广阔。" }] },
+        { sentences: [{ spanish: "Y el verso cae al alma como al pasto el rocío.", chinese: "诗句滴落灵魂，如同露水落在草上。" },{ spanish: "Qué importa que mi amor no pudiera guardarla.", chinese: "我的爱不能留住她又有何妨。" }] },
+        { sentences: [{ spanish: "La noche está estrellada y ella no está conmigo.", chinese: "夜空缀满繁星，而她不在我身旁。" },{ spanish: "Eso es todo. A lo lejos alguien canta. A lo lejos.", chinese: "就这样。远处有人在唱歌。在远处。" }] },
+        { sentences: [{ spanish: "Mi alma no se contenta con haberla perdido.", chinese: "我的灵魂不甘于就此失去她。" },{ spanish: "Como para acercarla mi mirada la busca.", chinese: "我的视线追寻她，仿佛要靠近她。" }] },
+        { sentences: [{ spanish: "Mi corazón la busca, y ella no está conmigo.", chinese: "我的心在寻她，而她不在我身旁。" },{ spanish: "La misma noche que hace blanquear los mismos árboles.", chinese: "同样的夜，漂白了同样的树林。" }] },
+        { sentences: [{ spanish: "Nosotros, los de entonces, ya no somos los mismos.", chinese: "我们，当时的我们，已不再是同样的我们。" },{ spanish: "Ya no la quiero, es cierto, pero cuánto la quise.", chinese: "我已不爱她，这是确定的，但我曾多么爱她。" }] },
+        { sentences: [{ spanish: "Mi voz buscaba el viento para tocar su oído.", chinese: "我的声音曾寻找风，以触到她耳畔。" },{ spanish: "De otro. Será de otro. Como antes de mis besos.", chinese: "别人的。她将属于别人。如同属于我亲吻之前。" }] },
+        { sentences: [{ spanish: "Su voz, su cuerpo claro. Sus ojos infinitos.", chinese: "她的声音，她清澈的身体。她深邃的眼睛。" },{ spanish: "Ya no la quiero, es cierto, pero tal vez la quiero.", chinese: "我已不爱她，这是确定的，但也许我还爱她。" }] },
+        { sentences: [{ spanish: "Es tan corto el amor, y es tan largo el olvido.", chinese: "爱情如此短暂，而遗忘如此漫长。" },{ spanish: "Porque en noches como ésta la tuve entre mis brazos,", chinese: "因为多少个像今晚的夜里，我将她拥入怀中，" },{ spanish: "mi alma no se contenta con haberla perdido.", chinese: "我的灵魂不甘于就此失去她。" }] },
+        { sentences: [{ spanish: "Aunque éste sea el último dolor que ella me causa,", chinese: "即便这是她带给我的最后的痛苦，" },{ spanish: "y éstos sean los últimos versos que yo le escribo.", chinese: "即便这是我写给她的最后的诗句。" }] }
+      ] }]
     },
-    // ---------------- 洛尔迦: La Guitarra ----------------
     "La Guitarra": {
       author: "Federico García Lorca",
       type: "诗歌",
-      chapters: [{
-        title: "La Guitarra",
-        paragraphs: [
-          { sentences: [{ spanish: "Empieza el llanto", chinese: "开始哭泣" },{ spanish: "de la guitarra.", chinese: "吉他的哭泣。" }] },
-          { sentences: [{ spanish: "Se rompen las copas", chinese: "黎明的酒杯" },{ spanish: "de la madrugada.", chinese: "碎裂。" }] },
-          { sentences: [{ spanish: "Empieza el llanto", chinese: "开始哭泣" },{ spanish: "de la guitarra.", chinese: "吉他的哭泣。" }] },
-          { sentences: [{ spanish: "Es inútil", chinese: "无用" },{ spanish: "callarla.", chinese: "让它沉默。" }] },
-          { sentences: [{ spanish: "Es imposible", chinese: "不可能" },{ spanish: "callarla.", chinese: "让它沉默。" }] },
-          { sentences: [{ spanish: "Llora monótona", chinese: "它单调地哭泣" },{ spanish: "como llora el agua,", chinese: "像水在哭泣" },{ spanish: "como llora el viento", chinese: "像风在哭泣" },{ spanish: "sobre la nevada.", chinese: "在雪地上。" }] },
-          { sentences: [{ spanish: "Es imposible", chinese: "不可能" },{ spanish: "callarla.", chinese: "让它沉默。" }] },
-          { sentences: [{ spanish: "Llora por cosas", chinese: "它为远方的事物" },{ spanish: "lejanas.", chinese: "哭泣。" },{ spanish: "Arena del Sur caliente", chinese: "南方炽热的沙" },{ spanish: "que pide camelias blancas.", chinese: "渴求白色的山茶花。" }] },
-          { sentences: [{ spanish: "Llora flecha sin blanco,", chinese: "它哭泣没有靶子的箭矢" },{ spanish: "la tarde sin mañana,", chinese: "没有黎明的黄昏" },{ spanish: "y el primer pájaro muerto", chinese: "以及第一只死去的鸟" },{ spanish: "sobre la rama.", chinese: "在枝头。" }] },
-          { sentences: [{ spanish: "¡Oh guitarra!", chinese: "哦，吉他！" },{ spanish: "Corazón malherido", chinese: "深受重创的心灵" },{ spanish: "por cinco espadas.", chinese: "被五柄利剑刺穿。" }] }
-        ]
-      }]
+      chapters: [{ title: "La Guitarra", paragraphs: [
+        { sentences: [{ spanish: "Empieza el llanto", chinese: "开始哭泣" },{ spanish: "de la guitarra.", chinese: "吉他的哭泣。" }] },
+        { sentences: [{ spanish: "Se rompen las copas", chinese: "黎明的酒杯" },{ spanish: "de la madrugada.", chinese: "碎裂。" }] },
+        { sentences: [{ spanish: "Empieza el llanto", chinese: "开始哭泣" },{ spanish: "de la guitarra.", chinese: "吉他的哭泣。" }] },
+        { sentences: [{ spanish: "Es inútil", chinese: "无用" },{ spanish: "callarla.", chinese: "让它沉默。" }] },
+        { sentences: [{ spanish: "Es imposible", chinese: "不可能" },{ spanish: "callarla.", chinese: "让它沉默。" }] },
+        { sentences: [{ spanish: "Llora monótona", chinese: "它单调地哭泣" },{ spanish: "como llora el agua,", chinese: "像水在哭泣" },{ spanish: "como llora el viento", chinese: "像风在哭泣" },{ spanish: "sobre la nevada.", chinese: "在雪地上。" }] },
+        { sentences: [{ spanish: "Es imposible", chinese: "不可能" },{ spanish: "callarla.", chinese: "让它沉默。" }] },
+        { sentences: [{ spanish: "Llora por cosas", chinese: "它为远方的事物" },{ spanish: "lejanas.", chinese: "哭泣。" },{ spanish: "Arena del Sur caliente", chinese: "南方炽热的沙" },{ spanish: "que pide camelias blancas.", chinese: "渴求白色的山茶花。" }] },
+        { sentences: [{ spanish: "Llora flecha sin blanco,", chinese: "它哭泣没有靶子的箭矢" },{ spanish: "la tarde sin mañana,", chinese: "没有黎明的黄昏" },{ spanish: "y el primer pájaro muerto", chinese: "以及第一只死去的鸟" },{ spanish: "sobre la rama.", chinese: "在枝头。" }] },
+        { sentences: [{ spanish: "¡Oh guitarra!", chinese: "哦，吉他！" },{ spanish: "Corazón malherido", chinese: "深受重创的心灵" },{ spanish: "por cinco espadas.", chinese: "被五柄利剑刺穿。" }] }
+      ] }]
     },
-    // ---------------- 帕斯: El Instante ----------------
     "El Instante": {
       author: "Octavio Paz",
       type: "诗歌",
-      chapters: [{
-        title: "El Instante",
-        paragraphs: [
-          { sentences: [{ spanish: "Del tiovivo de las horas", chinese: "从时间的旋转木马" },{ spanish: "bajas, amor.", chinese: "你下来，爱人。" }] },
-          { sentences: [{ spanish: "Tus pestañas", chinese: "你的睫毛" },{ spanish: "escriben en el aire", chinese: "在空气中书写" },{ spanish: "el nombre de una isla.", chinese: "一座岛屿的名字。" }] },
-          { sentences: [{ spanish: "Tu pelo es un incendio.", chinese: "你的头发是一场大火。" },{ spanish: "Tu lengua", chinese: "你的舌头" },{ spanish: "un pez en llamas.", chinese: "一条燃烧的鱼。" }] },
-          { sentences: [{ spanish: "El día abre sus alas", chinese: "白昼张开翅膀" },{ spanish: "sobre la plaza.", chinese: "在广场上方。" }] },
-          { sentences: [{ spanish: "¡Ay, amor!", chinese: "啊，爱人！" },{ spanish: "Arde el instante.", chinese: "瞬间在燃烧。" }] },
-          { sentences: [{ spanish: "Nos vamos a morir,", chinese: "我们终将死去，" },{ spanish: "y éste es el único instante.", chinese: "而这是唯一的瞬间。" }] }
-        ]
-      }]
+      chapters: [{ title: "El Instante", paragraphs: [
+        { sentences: [{ spanish: "Del tiovivo de las horas", chinese: "从时间的旋转木马" },{ spanish: "bajas, amor.", chinese: "你下来，爱人。" }] },
+        { sentences: [{ spanish: "Tus pestañas", chinese: "你的睫毛" },{ spanish: "escriben en el aire", chinese: "在空气中书写" },{ spanish: "el nombre de una isla.", chinese: "一座岛屿的名字。" }] },
+        { sentences: [{ spanish: "Tu pelo es un incendio.", chinese: "你的头发是一场大火。" },{ spanish: "Tu lengua", chinese: "你的舌头" },{ spanish: "un pez en llamas.", chinese: "一条燃烧的鱼。" }] },
+        { sentences: [{ spanish: "El día abre sus alas", chinese: "白昼张开翅膀" },{ spanish: "sobre la plaza.", chinese: "在广场上方。" }] },
+        { sentences: [{ spanish: "¡Ay, amor!", chinese: "啊，爱人！" },{ spanish: "Arde el instante.", chinese: "瞬间在燃烧。" }] },
+        { sentences: [{ spanish: "Nos vamos a morir,", chinese: "我们终将死去，" },{ spanish: "y éste es el único instante.", chinese: "而这是唯一的瞬间。" }] }
+      ] }]
     }
   };
 
-  // ---------- 新增：百年孤独（动态加载）----------
+  // 百年孤独配置
   const ONE_HUNDRED_YEARS_CONFIG = {
     name: "Cien años de soledad",
     author: "Gabriel García Márquez",
@@ -456,15 +438,63 @@
     isDynamic: true
   };
 
-  // 存储动态加载的章节数据
   let dynamicChapters = [];
   let isLoadingDynamic = false;
   let dynamicLoadError = null;
-
-  // 合并所有作品（静态 + 动态将后续加入）
   let NOVEL_DATA = { ...STATIC_NOVEL_DATA };
 
-  // 解析西语文件函数
+  // ============================================================
+  // 修正后的中文/英文解析函数
+  // 关键改进：章节之间用空行分隔，每章内的每一行都是段落内容
+  // ============================================================
+  function parseChineseFile(content) {
+    const lines = content.split(/\r?\n/);
+    const chapters = [];
+    let currentChapter = null;
+    let i = 0;
+    const totalLines = lines.length;
+    
+    while (i < totalLines) {
+      const line = lines[i];
+      
+      // 检测空行作为章节分隔符
+      if (line === '' || line === null || line.trim() === '') {
+        // 遇到空行，如果当前有章节内容，保存它
+        if (currentChapter && currentChapter.paragraphs.length > 0) {
+          chapters.push(currentChapter);
+          currentChapter = null;
+        }
+        i++;
+        continue;
+      }
+      
+      // 非空行：这是新章节的开始（或者当前章节的续行）
+      if (line.trim().length > 0) {
+        // 如果没有当前章节，创建新章节
+        if (!currentChapter) {
+          currentChapter = {
+            title: `第${chapters.length + 1}章`,
+            paragraphs: []
+          };
+        }
+        // 每一行都是一个段落（trim后加入）
+        const cleanedLine = line.trim();
+        if (cleanedLine.length > 0) {
+          currentChapter.paragraphs.push(cleanedLine);
+        }
+      }
+      i++;
+    }
+    
+    // 保存最后一章
+    if (currentChapter && currentChapter.paragraphs.length > 0) {
+      chapters.push(currentChapter);
+    }
+    
+    return chapters;
+  }
+
+  // 西语解析函数（保持原有逻辑，因为西语格式不同）
   function parseSpanishFile(content) {
     const lines = content.split(/\r?\n/);
     const chapters = [];
@@ -526,67 +556,6 @@
     return chapters;
   }
 
-  // 解析中文文件函数
-  function parseChineseFile(content) {
-    const lines = content.split(/\r?\n/);
-    const chapters = [];
-    let currentChapter = null;
-    let currentParagraph = '';
-    let i = 0;
-    
-    while (i < lines.length) {
-      const line = lines[i];
-      
-      if (line === '' || line === null) {
-        if (currentParagraph && currentParagraph.trim()) {
-          if (currentChapter) {
-            currentChapter.paragraphs.push(currentParagraph.trim());
-          }
-          currentParagraph = '';
-        }
-        if (i + 1 < lines.length && lines[i+1] && lines[i+1].trim().length > 0) {
-          if (currentChapter && currentChapter.paragraphs.length > 0) {
-            chapters.push(currentChapter);
-          }
-          currentChapter = {
-            title: `第${chapters.length + 1}章`,
-            paragraphs: []
-          };
-          i++;
-        }
-        i++;
-        continue;
-      }
-      
-      const cleanedLine = line.trim();
-      if (cleanedLine.length > 0) {
-        if (currentParagraph === '') {
-          currentParagraph = cleanedLine;
-        } else {
-          if (cleanedLine && /^[a-zA-Z\u4e00-\u9fa5]/.test(cleanedLine.charAt(0))) {
-            currentParagraph += ' ' + cleanedLine;
-          } else {
-            if (currentParagraph) {
-              currentChapter.paragraphs.push(currentParagraph);
-            }
-            currentParagraph = cleanedLine;
-          }
-        }
-      }
-      i++;
-    }
-    
-    if (currentChapter) {
-      if (currentParagraph.trim()) {
-        currentChapter.paragraphs.push(currentParagraph.trim());
-      }
-      if (currentChapter.paragraphs.length > 0) {
-        chapters.push(currentChapter);
-      }
-    }
-    return chapters;
-  }
-
   // 拆分句子
   function splitIntoSentences(text) {
     if (!text) return [];
@@ -594,7 +563,7 @@
     return sentences.filter(s => s.trim().length > 0);
   }
 
-  // 合并章节
+  // 合并章节（逐段对齐）
   function mergeChapters(spanishChapters, chineseChapters) {
     const maxChapters = Math.min(spanishChapters.length, chineseChapters.length);
     const result = [];
@@ -665,14 +634,12 @@
       
       dynamicChapters = mergeChapters(spanishChapters, chineseChapters);
       
-      // 将百年孤独添加到 NOVEL_DATA
       NOVEL_DATA[ONE_HUNDRED_YEARS_CONFIG.name] = {
         author: ONE_HUNDRED_YEARS_CONFIG.author,
         type: "长篇小说",
         chapters: dynamicChapters
       };
       
-      // 初始化进度
       if (!readingProgress[ONE_HUNDRED_YEARS_CONFIG.name]) {
         readingProgress[ONE_HUNDRED_YEARS_CONFIG.name] = {
           completedChapters: new Array(dynamicChapters.length).fill(false),
@@ -681,11 +648,7 @@
       }
       
       isLoadingDynamic = false;
-      
-      // 重新渲染书桌
       renderBookShelf();
-      
-      // 如果当前选中的是百年孤独，刷新显示
       if (currentBookId === ONE_HUNDRED_YEARS_CONFIG.name) {
         renderCurrentChapter();
       }
@@ -694,13 +657,11 @@
       console.error('加载百年孤独失败:', error);
       dynamicLoadError = error;
       isLoadingDynamic = false;
-      
-      // 在书桌中显示错误信息
       renderBookShelf();
     }
   }
 
-  // 读取/初始化进度
+  // 初始化进度
   let readingProgress = {};
   for (const [bookName, bookData] of Object.entries(STATIC_NOVEL_DATA)) {
     readingProgress[bookName] = {
@@ -740,7 +701,7 @@
       if (currentBookId === ONE_HUNDRED_YEARS_CONFIG.name && isLoadingDynamic) {
         readingContainer.innerHTML = '<div class="loading-indicator">📖 正在加载《百年孤独》全文，请稍候...</div>';
       } else if (currentBookId === ONE_HUNDRED_YEARS_CONFIG.name && dynamicLoadError) {
-        readingContainer.innerHTML = `<div class="loading-indicator" style="color: #c44;">⚠️ 加载失败: ${dynamicLoadError.message}<br><br>请确保以下文件已上传到GitHub仓库:<br>- ${ONE_HUNDRED_YEARS_CONFIG.spanishFile}<br>- ${ONE_HUNDRED_YEARS_CONFIG.chineseFile}<br><br><button onclick="location.reload()" style="padding:0.5rem 1rem; cursor:pointer;">重试</button></div>`;
+        readingContainer.innerHTML = `<div class="loading-indicator" style="color: #c44;">⚠️ 加载失败: ${dynamicLoadError.message}<br><br>请确保以下文件已上传:<br>- ${ONE_HUNDRED_YEARS_CONFIG.spanishFile}<br>- ${ONE_HUNDRED_YEARS_CONFIG.chineseFile}<br><br><button onclick="location.reload()" style="padding:0.5rem 1rem; cursor:pointer;">重试</button></div>`;
       } else {
         readingContainer.innerHTML = '<div style="text-align:center; padding:3rem;">📭 章节缺失</div>';
       }
@@ -814,7 +775,7 @@
     if (!progress) return;
     if (progress.completedChapters[currentChapterIdx]) {
       readingStatusMsg.innerText = '📌 本章之前已经标记过啦！';
-      setTimeout(() => { readingStatusMsg.innerText = '✨ 点击诗句即可查看中文翻译'; }, 1500);
+      setTimeout(() => { readingStatusMsg.innerText = '✨ 点击句子即可查看翻译'; }, 1500);
       return;
     }
     progress.completedChapters[currentChapterIdx] = true;
@@ -822,13 +783,13 @@
     markBtn.classList.add('completed');
     markBtn.innerHTML = '✅ 本章已完成';
     readingStatusMsg.innerText = '🎉 章节进度已更新！继续阅读吧。';
-    setTimeout(() => { readingStatusMsg.innerText = '✨ 点击诗句即可查看中文翻译'; }, 2000);
+    setTimeout(() => { readingStatusMsg.innerText = '✨ 点击句子即可查看翻译'; }, 2000);
     updateGlobalProgress();
     renderBookShelf();
     const allCompleted = progress.completedChapters.every(v => v === true);
     if (allCompleted) {
       readingStatusMsg.innerText = `🏆 恭喜！《${currentBookId}》已全部读完！`;
-      setTimeout(() => { readingStatusMsg.innerText = '✨ 点击诗句即可查看中文翻译'; }, 3000);
+      setTimeout(() => { readingStatusMsg.innerText = '✨ 点击句子即可查看翻译'; }, 3000);
     }
   }
 
@@ -839,7 +800,7 @@
       renderCurrentChapter(); 
     } else { 
       readingStatusMsg.innerText = '已经是第一部分'; 
-      setTimeout(() => { readingStatusMsg.innerText = '✨ 点击诗句即可查看中文翻译'; }, 800); 
+      setTimeout(() => { readingStatusMsg.innerText = '✨ 点击句子即可查看翻译'; }, 800); 
     }
   }
   
@@ -850,7 +811,7 @@
       renderCurrentChapter(); 
     } else { 
       readingStatusMsg.innerText = '🎯 已是最后一部分，试试其他作品吧~'; 
-      setTimeout(() => { readingStatusMsg.innerText = '✨ 点击诗句即可查看中文翻译'; }, 1500); 
+      setTimeout(() => { readingStatusMsg.innerText = '✨ 点击句子即可查看翻译'; }, 1500); 
     }
   }
 
@@ -894,7 +855,6 @@
     }
   }
 
-  // 按作家分组渲染书桌
   function renderBookShelf() {
     const grouped = {};
     for (const [bookName, bookData] of Object.entries(NOVEL_DATA)) {
@@ -948,7 +908,6 @@
       bookShelfList.appendChild(groupDiv);
     }
     
-    // 如果百年孤独还在加载，显示提示
     if (isLoadingDynamic && !NOVEL_DATA[ONE_HUNDRED_YEARS_CONFIG.name]) {
       const loadingDiv = document.createElement('div');
       loadingDiv.className = 'author-group';
@@ -971,7 +930,6 @@
   renderBookShelf();
   updateGlobalProgress();
   
-  // 开始加载百年孤独
   loadOneHundredYears();
   
   window.addEventListener('beforeunload', () => saveProgressToLocal());
