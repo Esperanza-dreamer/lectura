@@ -979,7 +979,8 @@
   // ============================================================
   function splitParagraphIntoSentences(paragraphText) {
     // 按句号、分号、感叹号、问号拆分，保留标点
-    const sentences = paragraphText.split(/(?<=[.;!?])\s+/);
+    // 使用正向预查，确保分号被保留在句子中
+    const sentences = paragraphText.split(/(?<=[.!?;])\s+/);
     return sentences.filter(s => s.trim().length > 0);
   }
 
