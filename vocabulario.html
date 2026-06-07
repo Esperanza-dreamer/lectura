@@ -10,11 +10,39 @@
       padding: 0;
       box-sizing: border-box;
     }
+    /* 主题变量（默认浅绿） */
     body {
-      background-color: #F7F5F0;
+      --bg-body: #F7F5F0;
+      --bg-card: #FFFFFF;
+      --border-color: #E9E2D9;
+      --accent: #3A6B5B;
+      --accent-light: #EBE7E0;
+      --accent-dark: #2E5A4A;
+      --text-color: #2C2A29;
+      --text-light: #8A7F74;
+      background-color: var(--bg-body);
       font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-      color: #2C2A29;
+      color: var(--text-color);
       line-height: 1.6;
+      transition: background-color 0.2s, color 0.2s;
+    }
+    /* 蓝色主题 */
+    body.theme-blue {
+      --bg-body: #EFF3F6;
+      --bg-card: #FFFFFF;
+      --border-color: #D0E0EB;
+      --accent: #2C6C9E;
+      --accent-light: #E2ECF3;
+      --accent-dark: #235A82;
+    }
+    /* 暖橙主题 */
+    body.theme-terracotta {
+      --bg-body: #FDF6EC;
+      --bg-card: #FFFFFF;
+      --border-color: #F0E2D0;
+      --accent: #B85C2A;
+      --accent-light: #F5E6DC;
+      --accent-dark: #9A4A20;
     }
     .container {
       max-width: 900px;
@@ -29,12 +57,12 @@
       gap: 1rem;
       margin-bottom: 2rem;
       padding-bottom: 1rem;
-      border-bottom: 1px solid #E4DDD4;
+      border-bottom: 1px solid var(--border-color);
     }
     .header h1 {
       font-size: 1.8rem;
       font-weight: 500;
-      background: linear-gradient(135deg, #3A6B5B, #1F4E3F);
+      background: linear-gradient(135deg, var(--accent), var(--accent-dark));
       background-clip: text;
       -webkit-background-clip: text;
       color: transparent;
@@ -42,16 +70,17 @@
     .header-buttons {
       display: flex;
       gap: 0.8rem;
+      flex-wrap: wrap;
     }
     .btn {
-      background: #F0EDE7;
+      background: var(--accent-light);
       border: none;
       padding: 0.5rem 1rem;
       border-radius: 40px;
       font-size: 0.85rem;
       cursor: pointer;
       transition: all 0.2s;
-      color: #2E4A3C;
+      color: var(--accent);
     }
     .btn-danger {
       background: #F5E6E6;
@@ -61,7 +90,12 @@
       background: #F0D8D8;
     }
     .btn:hover {
-      background: #E8E0D6;
+      background: var(--accent);
+      color: white;
+    }
+    .theme-btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
     }
     .search-bar {
       margin-bottom: 1.5rem;
@@ -70,14 +104,15 @@
       width: 100%;
       padding: 0.75rem 1rem;
       border-radius: 40px;
-      border: 1px solid #E2DDD4;
-      background: white;
+      border: 1px solid var(--border-color);
+      background: var(--bg-card);
       font-size: 0.9rem;
       outline: none;
       transition: all 0.2s;
+      color: var(--text-color);
     }
     .search-bar input:focus {
-      border-color: #9ABFAD;
+      border-color: var(--accent);
     }
     .vocab-list {
       display: flex;
@@ -85,10 +120,10 @@
       gap: 1rem;
     }
     .vocab-card {
-      background: white;
+      background: var(--bg-card);
       border-radius: 20px;
       padding: 1rem 1.2rem;
-      border: 1px solid #E9E2D9;
+      border: 1px solid var(--border-color);
       transition: all 0.2s;
       cursor: pointer;
     }
@@ -105,7 +140,7 @@
     .word {
       font-size: 1.3rem;
       font-weight: 600;
-      color: #2F3E38;
+      color: var(--accent);
       font-family: 'Cormorant Garamond', serif;
     }
     .delete-btn {
@@ -113,7 +148,7 @@
       border: none;
       font-size: 1.1rem;
       cursor: pointer;
-      color: #C4B6A8;
+      color: var(--text-light);
       transition: color 0.2s;
       padding: 0 4px;
     }
@@ -121,45 +156,39 @@
       color: #B85C5C;
     }
     .definition {
-      color: #5A6B5E;
+      color: var(--accent-dark);
       font-size: 0.9rem;
       margin-bottom: 0.75rem;
-      border-left: 3px solid #C8DFD0;
+      border-left: 3px solid var(--accent-light);
       padding-left: 0.75rem;
     }
     .example {
       font-size: 0.85rem;
-      color: #8A7F74;
+      color: var(--text-light);
       margin-top: 0.5rem;
       font-style: italic;
       line-height: 1.5;
     }
     .source {
       font-size: 0.7rem;
-      color: #A89F92;
+      color: var(--text-light);
       margin-top: 0.5rem;
       letter-spacing: 0.3px;
     }
     .empty-state {
       text-align: center;
       padding: 3rem;
-      color: #A89F92;
-    }
-    .count-badge {
-      background: #EBE7E0;
-      padding: 0.2rem 0.7rem;
-      border-radius: 40px;
-      font-size: 0.8rem;
+      color: var(--text-light);
     }
     footer {
       margin-top: 2rem;
       text-align: center;
       font-size: 0.75rem;
-      color: #B8AD9F;
-      border-top: 1px solid #E4DDD4;
+      color: var(--text-light);
+      border-top: 1px solid var(--border-color);
       padding-top: 1.5rem;
     }
-    /* 复习模式：点击隐藏释义和例句 */
+    /* 复习模式 */
     .vocab-card.review-mode .definition,
     .vocab-card.review-mode .example {
       filter: blur(5px);
@@ -175,12 +204,16 @@
       .word { font-size: 1.1rem; }
     }
   </style>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500&family=Cormorant+Garamond:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
 <div class="container">
   <div class="header">
     <h1>📖 我的单词本</h1>
     <div class="header-buttons">
+      <button class="btn theme-btn" id="themeDefaultBtn">🌿 浅绿</button>
+      <button class="btn theme-btn" id="themeBlueBtn">💧 蓝</button>
+      <button class="btn theme-btn" id="themeTerracottaBtn">🔥 橙</button>
       <button class="btn" id="reviewModeBtn">🔍 复习模式</button>
       <button class="btn btn-danger" id="clearAllBtn">🗑️ 清空全部</button>
       <button class="btn" onclick="window.location.href='index.html'">← 返回阅读</button>
@@ -191,26 +224,19 @@
     <input type="text" id="searchInput" placeholder="🔍 搜索单词或释义...">
   </div>
   
-  <div id="vocabContainer" class="vocab-list">
-    <!-- 动态填充 -->
-  </div>
+  <div id="vocabContainer" class="vocab-list"></div>
   
-  <footer>
-    💡 提示：点击单词卡片可查看/隐藏释义和例句（复习模式）
-  </footer>
+  <footer>💡 提示：点击单词卡片可查看/隐藏释义和例句（复习模式）</footer>
 </div>
 
 <script>
   const STORAGE_KEY = 'vocabulary_book';
   let reviewMode = false;
-  let currentFilter = '';
   
   function getVocabularyBook() {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored) {
-      try {
-        return JSON.parse(stored);
-      } catch(e) { return []; }
+      try { return JSON.parse(stored); } catch(e) { return []; }
     }
     return [];
   }
@@ -232,9 +258,18 @@
     }
   }
   
+  function escapeHtml(str) {
+    if (!str) return '';
+    return str.replace(/[&<>]/g, function(m) {
+      if (m === '&') return '&amp;';
+      if (m === '<') return '&lt;';
+      if (m === '>') return '&gt;';
+      return m;
+    });
+  }
+  
   function renderList() {
     let book = getVocabularyBook();
-    const container = document.getElementById('vocabContainer');
     const searchTerm = document.getElementById('searchInput').value.toLowerCase();
     
     let filtered = book;
@@ -245,6 +280,7 @@
       );
     }
     
+    const container = document.getElementById('vocabContainer');
     if (filtered.length === 0) {
       container.innerHTML = `<div class="empty-state">📭 暂无单词，去阅读页面添加吧</div>`;
       return;
@@ -261,27 +297,6 @@
         <div class="source">📚 出自：${escapeHtml(item.source)} · ${new Date(item.timestamp).toLocaleDateString()}</div>
       </div>
     `).join('');
-    
-    // 重新绑定卡片点击事件（复习模式切换可见性已经通过CSS控制）
-    document.querySelectorAll('.vocab-card').forEach(card => {
-      card.addEventListener('click', (e) => {
-        if (e.target.classList.contains('delete-btn')) return;
-        // 复习模式下，点击卡片临时显示内容（CSS hover 已处理，这里可选额外行为）
-        if (reviewMode) {
-          // 可选：闪烁提示
-        }
-      });
-    });
-  }
-  
-  function escapeHtml(str) {
-    if (!str) return '';
-    return str.replace(/[&<>]/g, function(m) {
-      if (m === '&') return '&amp;';
-      if (m === '<') return '&lt;';
-      if (m === '>') return '&gt;';
-      return m;
-    });
   }
   
   function toggleReviewMode() {
@@ -291,12 +306,30 @@
     renderList();
   }
   
+  // 主题管理
+  function setTheme(themeName) {
+    document.body.className = themeName === 'default' ? '' : `theme-${themeName}`;
+    localStorage.setItem('lectura_theme', themeName === 'default' ? '' : `theme-${themeName}`);
+  }
+  
+  function loadTheme() {
+    const savedTheme = localStorage.getItem('lectura_theme');
+    if (savedTheme && (savedTheme === 'theme-blue' || savedTheme === 'theme-terracotta')) {
+      document.body.className = savedTheme;
+    } else {
+      document.body.className = '';
+    }
+  }
+  
   // 监听搜索
   document.getElementById('searchInput').addEventListener('input', renderList);
   document.getElementById('reviewModeBtn').addEventListener('click', toggleReviewMode);
   document.getElementById('clearAllBtn').addEventListener('click', clearAll);
+  document.getElementById('themeDefaultBtn').addEventListener('click', () => setTheme('default'));
+  document.getElementById('themeBlueBtn').addEventListener('click', () => setTheme('blue'));
+  document.getElementById('themeTerracottaBtn').addEventListener('click', () => setTheme('terracotta'));
   
-  // 初始渲染
+  loadTheme();
   renderList();
 </script>
 </body>
