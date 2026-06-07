@@ -10,6 +10,7 @@
       padding: 0;
       box-sizing: border-box;
     }
+    /* 主题变量（默认浅绿） */
     body {
       --bg-body: #F7F5F0;
       --bg-card: #FFFFFF;
@@ -25,6 +26,7 @@
       line-height: 1.65;
       transition: background-color 0.2s, color 0.2s;
     }
+    /* 蓝色主题 */
     body.theme-blue {
       --bg-body: #EFF3F6;
       --bg-card: #FFFFFF;
@@ -33,6 +35,7 @@
       --accent-light: #E2ECF3;
       --accent-dark: #235A82;
     }
+    /* 暖橙主题 */
     body.theme-terracotta {
       --bg-body: #FDF6EC;
       --bg-card: #FFFFFF;
@@ -146,6 +149,7 @@
       margin-bottom: 2rem;
       transition: all 0.2s;
     }
+    /* 字号控制 */
     .reading-area.text-small .sentence,
     .reading-area.text-small .word {
       font-size: 0.9rem;
@@ -180,6 +184,7 @@
     .word:hover {
       background-color: #E8F0FE;
     }
+    /* 弹窗样式 */
     .translation-tooltip {
       position: absolute;
       background: #2F3E38;
@@ -188,7 +193,7 @@
       line-height: 1.5;
       padding: 0.75rem 1rem;
       border-radius: 20px;
-      max-width: 400px;
+      max-width: 420px;
       min-width: 260px;
       white-space: normal;
       word-break: break-word;
@@ -257,6 +262,9 @@
       background: #4A6A5A;
       opacity: 0.7;
       cursor: default;
+    }
+    .tooltip-btn-added:hover {
+      background: #4A6A5A;
     }
     .paragraph {
       margin-bottom: 1.5rem;
@@ -383,6 +391,7 @@
         gap: 0.5rem;
       }
     }
+    /* 字体选项 */
     .font-serif {
       font-family: 'Cormorant Garamond', 'Georgia', 'Times New Roman', serif;
     }
@@ -441,7 +450,7 @@
 
   <div class="action-bar">
     <button class="mark-btn" id="markChapterBtn">✅ 标记本章读完</button>
-    <div class="status-message" id="readingStatusMsg">✨ 点击有修辞标注的句子查看赏析，点击其他单词查词</div>
+    <div class="status-message" id="readingStatusMsg">✨ 点击单词查词 / 点击特定句子查看修辞赏析</div>
   </div>
 
   <div class="book-shelf">
@@ -452,34 +461,9 @@
 
 <script>
   // ============================================================
-  // 静态作品数据（完整保留：博尔赫斯、聂鲁达、洛尔迦、帕斯）
+  // 静态作品数据（完整保留所有原有内容）
   // ============================================================
   const STATIC_NOVEL_DATA = {
-    "El Buscón (Capítulo 3)": {
-      author: "Francisco de Quevedo",
-      type: "小说",
-      mode: "word",
-      isDynamic: true,
-      hasRhetoric: true,
-      file: "el_buscon-capitulo3.txt"
-    },
-    "Lazarillo de Tormes (Tratado 2)": {
-      author: "Anónimo",
-      type: "小说",
-      mode: "word",
-      isDynamic: true,
-      file: "lazarillo_de_tormes-tratado2.txt"
-    },
-    "Cien años de soledad": {
-      author: "Gabriel García Márquez",
-      type: "长篇小说",
-      mode: "word",
-      isDynamic: true,
-      file: "cien_anos_soledad.txt",
-      chineseFile: "hundredyearsofsolitude.txt",
-      isPaired: true
-    },
-    // ---------------- 博尔赫斯作品 ----------------
     "瞬息 / El instante": {
       author: "Jorge Luis Borges",
       type: "诗歌",
@@ -511,7 +495,6 @@
         { title: "终章", paragraphs: [{ sentences: [{ spanish: "Pasó otro año. Los centinelas notaron que el poeta no traía manuscrito. El rey lo vio con asombro; casi era otro. Algo (que no era el tiempo) le había surcado el rostro. Los ojos parecían mirar muy lejos o estar ciegos. El poeta pidió hablar a solas con el rey. Los esclavos se retiraron.", chinese: "又满了一年。王宫的守卫注意到诗人这次空手来到，没有手稿。国王见到了他不禁有点吃惊；他几乎成了另一个人。某些东西（并不是时间）在他脸上刻画了皱纹，改变了模样。他的眼睛仿佛望着老远的地方，或者瞎了。诗人请求同国王单独说几句话。奴隶们退了出去。" },{ spanish: "«¿Escribiste la oda?», preguntó el rey.", chinese: "“你写了颂歌没有？”国王问道。" },{ spanish: "«Sí», dijo tristemente el poeta. «Quiera Cristo Nuestro Señor impedírmelo.»", chinese: "“写了，”诗人悲哀地说。“但愿我主基督禁止我这么做。”" },{ spanish: "«¿Puedes repetirla?»", chinese: "“你能念念吗？”" },{ spanish: "«No me atrevo.»", chinese: "“我不敢。”" },{ spanish: "«Yo te doy el valor que te falta», dijo el rey.", chinese: "“我给你所欠缺的勇气，”国王宣称。" }] },{ sentences: [{ spanish: "El poeta dijo la oda. Era una sola línea.", chinese: "诗人念出那篇诗。只有一行。" },{ spanish: "El poeta y el rey no se atrevieron a repetirla en voz alta; la saborearon en silencio, como una plegaria secreta o una maldición. El rey estaba tan maravillado y tan abrumado como el poeta. Se miraron, muy pálidos.", chinese: "诗人和国王都没有大声念出那行诗的勇气，只在嘴里品味，仿佛它是秘密的祈祷或者诅咒。国王诧异和震惊的程度不下于诗人。两人对瞅着，面色惨白。" },{ spanish: "«En los años de mi juventud», dijo el rey, «navegué hacia el Occidente. En una isla vi perros de plata que daban muerte a jabalíes de oro. En otra isla olimos el fruto de los árboles de la magia y quedamos saciados. En una isla vi murallas de fuego. En la más lejana, un río que subía al cielo y en el río había peces y barcas. Ésas son cosas maravillosas, pero no pueden compararse con tu poema, que de algún modo las encierra. ¿Qué sortilegio te lo ha dictado?»", chinese: "“我年轻的时候，”国王说，“曾向西方航行。在一个岛上，我看到银的猪犬咬死金的野猪。在另一个岛上，我们闻到魔苹果的香味肚子就饱了。在一个岛上，我见到火焰的城墙。在一个最远的岛上，有一个通天河，河里有鱼，河上有船。这些都是神奇的事物，但不能同你的诗相比，因为你的诗仿佛把它们全包括在内了。什么巫术使你写出来的？”" },{ spanish: "«En el alba», dijo el poeta, «me desperté diciendo palabras que no comprendí al principio. Esas palabras eran un poema. Sentí que había cometido un pecado que el Espíritu Santo no perdona.»", chinese: "“天快亮时，”诗人说，“我一觉醒来，念念有词，开始自己也不明白什么意思。那几个字就是一篇诗。我觉得自己犯了天主不会饶恕的罪孽。”" },{ spanish: "«El que ahora compartimos los dos», dijo el rey en voz baja. «El de conocer la Belleza, que es un don vedado a los hombres. Ahora nos toca expiar. Te di un espejo y una máscara de oro; aquí tienes el tercer regalo, que será el último.»", chinese: "“正是我们两人现在共犯的罪孽，”国王悄声说。“了解到美的罪孽，因为这是禁止人们问津的。现在我们该为之付出代价了。我赐给你一面镜子和一个金面具；这里是第三件，也就是最后的一件礼物。”" },{ spanish: "Le puso en la diestra un puñal.", chinese: "国王拿一把匕首放在诗人右手。" }] },{ sentences: [{ spanish: "Del poeta sabemos que al salir del palacio se dio muerte; del rey, que es un mendigo que recorre los caminos de Irlanda, que fue su reino, y que no ha repetido nunca el poema.", chinese: "据我们所知，诗人一出王宫就自杀了；国王成了乞丐，在他的王国爱尔兰四处流浪，再也没有念过那句诗。" }] }] }
       ]
     },
-    // ---------------- 聂鲁达 --------------------
     "Poema XX": {
       author: "Pablo Neruda",
       type: "诗歌",
@@ -534,7 +517,6 @@
         { sentences: [{ spanish: "Aunque éste sea el último dolor que ella me causa,", chinese: "即便这是她带给我的最后的痛苦，" },{ spanish: "y éstos sean los últimos versos que yo le escribo.", chinese: "即便这是我写给她的最后的诗句。" }] }
       ] }]
     },
-    // ---------------- 洛尔迦 --------------------
     "La Guitarra": {
       author: "Federico García Lorca",
       type: "诗歌",
@@ -552,7 +534,6 @@
         { sentences: [{ spanish: "¡Oh guitarra!", chinese: "哦，吉他！" },{ spanish: "Corazón malherido", chinese: "深受重创的心灵" },{ spanish: "por cinco espadas.", chinese: "被五柄利剑刺穿。" }] }
       ] }]
     },
-    // ---------------- 帕斯 --------------------
     "La calle / 街道": {
       author: "Octavio Paz",
       type: "诗歌",
@@ -571,36 +552,65 @@
   };
 
   // ============================================================
-  // 修辞数据存储
+  // 动态作品配置
   // ============================================================
+  const DYNAMIC_BOOKS_CONFIG = {
+    "El Buscón (Capítulo 3)": {
+      author: "Francisco de Quevedo",
+      file: "el_buscon-capitulo3.txt",
+      mode: "word",
+      hasRhetoric: true
+    },
+    "Lazarillo de Tormes (Tratado 2)": {
+      author: "Anónimo",
+      file: "lazarillo_de_tormes-tratado2.txt",
+      mode: "word"
+    },
+    "Cien años de soledad": {
+      author: "Gabriel García Márquez",
+      file: "cien_anos_soledad.txt",
+      chineseFile: "hundredyearsofsolitude.txt",
+      mode: "word",
+      isPaired: true
+    }
+  };
+
+  // 修辞数据
   let rhetoricData = {};
-  
+
   async function loadRhetoricData() {
     try {
       const response = await fetch('rhetoric_el_buscon.json');
       if (response.ok) {
         rhetoricData = await response.json();
         console.log('✅ 修辞数据加载成功，共', Object.keys(rhetoricData).length, '条');
-      } else {
-        console.warn('⚠️ 修辞数据加载失败');
       }
     } catch (error) {
-      console.warn('⚠️ 修辞数据加载异常:', error);
+      console.warn('⚠️ 修辞数据加载失败:', error);
     }
   }
 
-  // ============================================================
+  // 检查句子是否有修辞（精确匹配原文）
+  function hasRhetoricForSentence(spanishText) {
+    const normalized = spanishText.trim().replace(/\s+/g, ' ');
+    for (const [key, value] of Object.entries(rhetoricData)) {
+      const normalizedKey = key.trim().replace(/\s+/g, ' ');
+      if (normalized === normalizedKey) {
+        return value;
+      }
+    }
+    return null;
+  }
+
   // 动态作品数据存储
-  // ============================================================
   let dynamicBooksData = {};
   let isLoadingDynamic = {};
   let dynamicLoadError = {};
 
+  // 查词缓存
   let glossCache = {};
 
-  // ============================================================
-  // 单词本存储操作
-  // ============================================================
+  // 单词本存储
   const STORAGE_KEY = 'vocabulary_book';
   
   function getVocabularyBook() {
@@ -639,8 +649,7 @@
   function updateVocabCountDisplay() {
     const countSpan = document.getElementById('vocabCount');
     if (countSpan) {
-      const book = getVocabularyBook();
-      countSpan.textContent = book.length;
+      countSpan.textContent = getVocabularyBook().length;
     }
   }
   
@@ -648,19 +657,15 @@
     window.location.href = 'vocabulario.html';
   });
 
-  // ============================================================
-  // Google Translate API 查词
-  // ============================================================
+  // Google Translate 查词
   async function lookupWord(word) {
     if (glossCache[word]) return glossCache[word];
     
     const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=es&tl=en&dt=t&q=${encodeURIComponent(word)}`;
-    
     try {
       const response = await fetch(url);
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const data = await response.json();
-      
       if (data && data[0] && data[0][0]) {
         const translations = data[0].map(item => item[0]).slice(0, 5);
         if (translations.length > 0) {
@@ -670,14 +675,12 @@
       }
       return [];
     } catch (error) {
-      console.error(`❌ 查词失败 (${word}):`, error);
+      console.error(`查词失败 (${word}):`, error);
       return [];
     }
   }
 
-  // ============================================================
   // 弹窗管理
-  // ============================================================
   let currentTooltip = null;
   
   function removeTooltip() {
@@ -689,7 +692,6 @@
   
   function showRhetoricTooltip(title, translation, analysis, rect) {
     removeTooltip();
-    
     const tooltip = document.createElement('div');
     tooltip.className = 'translation-tooltip';
     tooltip.innerHTML = `
@@ -698,21 +700,11 @@
       <div class="tooltip-analysis">${analysis.replace(/\n/g, '<br>')}</div>
     `;
     document.body.appendChild(tooltip);
-    
-    let left = rect.left + window.scrollX;
-    let top = rect.bottom + window.scrollY + 8;
-    const tooltipRect = tooltip.getBoundingClientRect();
-    if (left + tooltipRect.width > window.innerWidth - 20) {
-      left = window.innerWidth - tooltipRect.width - 20;
-    }
-    tooltip.style.left = `${left}px`;
-    tooltip.style.top = `${top}px`;
-    currentTooltip = tooltip;
+    positionTooltip(tooltip, rect);
   }
   
   function showWordTooltip(word, translations, rect, paragraphText, sourceBook) {
     removeTooltip();
-    
     const tooltip = document.createElement('div');
     tooltip.className = 'translation-tooltip';
     tooltip.innerHTML = `
@@ -732,16 +724,7 @@
       btn.disabled = true;
       updateVocabCountDisplay();
     };
-    
-    let left = rect.left + window.scrollX;
-    let top = rect.bottom + window.scrollY + 8;
-    const tooltipRect = tooltip.getBoundingClientRect();
-    if (left + tooltipRect.width > window.innerWidth - 20) {
-      left = window.innerWidth - tooltipRect.width - 20;
-    }
-    tooltip.style.left = `${left}px`;
-    tooltip.style.top = `${top}px`;
-    currentTooltip = tooltip;
+    positionTooltip(tooltip, rect);
   }
   
   function showSentenceTooltip(chineseText, rect) {
@@ -750,7 +733,10 @@
     tooltip.className = 'translation-tooltip';
     tooltip.textContent = chineseText;
     document.body.appendChild(tooltip);
-    
+    positionTooltip(tooltip, rect);
+  }
+  
+  function positionTooltip(tooltip, rect) {
     let left = rect.left + window.scrollX;
     let top = rect.bottom + window.scrollY + 8;
     const tooltipRect = tooltip.getBoundingClientRect();
@@ -768,9 +754,7 @@
     }
   });
 
-  // ============================================================
   // 解析单语文件
-  // ============================================================
   async function loadSingleLanguageBook(bookName, config) {
     isLoadingDynamic[bookName] = true;
     dynamicLoadError[bookName] = null;
@@ -790,6 +774,7 @@
         author: config.author,
         type: "小说",
         mode: "word",
+        hasRhetoric: config.hasRhetoric || false,
         chapters: [{ title: title, paragraphs: paragraphs }]
       };
       
@@ -809,14 +794,11 @@
     }
   }
 
-  // ============================================================
-  // 解析双语文件（百年孤独）
-  // ============================================================
+  // 双语文件解析（百年孤独）
   function parseChineseFile(content) {
     const lines = content.split(/\r?\n/);
     const chapters = [];
     let currentChapter = null;
-    
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i];
       if (line === '' || line === null || line.trim() === '') {
@@ -842,7 +824,6 @@
     const chapters = [];
     let currentChapter = null;
     let i = 0;
-    
     while (i < lines.length) {
       const line = lines[i];
       if (line && /^\d+$/.test(line.trim())) {
@@ -931,47 +912,8 @@
     }
   }
 
-  // ============================================================
-  // 加载所有动态作品
-  // ============================================================
-  async function loadAllDynamicBooks() {
-    for (const [bookName, config] of Object.entries(STATIC_NOVEL_DATA)) {
-      if (config.isDynamic) {
-        if (config.isPaired) {
-          await loadPairedBook(bookName, config);
-        } else {
-          await loadSingleLanguageBook(bookName, config);
-        }
-      }
-    }
-    
-    for (const [name, data] of Object.entries(dynamicBooksData)) {
-      NOVEL_DATA[name] = data;
-    }
-    renderBookShelf();
-    if (currentBookId !== "瞬息 / El instante" && NOVEL_DATA[currentBookId]) {
-      renderCurrentChapter();
-    }
-  }
-
-  // ============================================================
-  // 检查句子是否有修辞标注
-  // ============================================================
-  function hasRhetoricForSentence(spanishText) {
-    const normalized = spanishText.trim().replace(/\s+/g, ' ');
-    for (const [key, value] of Object.entries(rhetoricData)) {
-      const normalizedKey = key.trim().replace(/\s+/g, ' ');
-      if (normalized === normalizedKey || normalized.includes(normalizedKey)) {
-        return value;
-      }
-    }
-    return null;
-  }
-  
-  // ============================================================
   // 渲染章节
-  // ============================================================
-  function renderChapterWithMode(chapter, mode, sourceBookName) {
+  function renderChapterWithMode(chapter, mode, sourceBookName, hasRhetoric = false) {
     const container = document.createElement('div');
     container.className = `reading-area ${currentFontClass} ${currentTextSize}`;
     
@@ -982,23 +924,27 @@
         
         for (const sent of para.sentences) {
           const text = sent.spanish;
-          const hasRhetoric = (sourceBookName === "El Buscón (Capítulo 3)") ? hasRhetoricForSentence(text) : null;
           
+          // 检查当前句子是否有修辞（仅当该书启用了修辞功能）
+          let rhetoricInfo = null;
           if (hasRhetoric) {
+            rhetoricInfo = hasRhetoricForSentence(text);
+          }
+          
+          if (rhetoricInfo) {
+            // 有修辞的句子：整个句子作为可点击元素，无特殊样式
             const rhetoricSpan = document.createElement('span');
             rhetoricSpan.className = 'sentence';
-            rhetoricSpan.style.backgroundColor = 'rgba(255, 214, 165, 0.2)';
-            rhetoricSpan.style.borderRadius = '8px';
-            rhetoricSpan.style.padding = '2px 4px';
             rhetoricSpan.style.cursor = 'pointer';
             rhetoricSpan.textContent = text;
             rhetoricSpan.addEventListener('click', (e) => {
               e.stopPropagation();
               const rect = rhetoricSpan.getBoundingClientRect();
-              showRhetoricTooltip(hasRhetoric.title, hasRhetoric.translation, hasRhetoric.analysis, rect);
+              showRhetoricTooltip(rhetoricInfo.title, rhetoricInfo.translation, rhetoricInfo.analysis, rect);
             });
             pDiv.appendChild(rhetoricSpan);
           } else {
+            // 无修辞：拆分为单词
             const tokens = text.split(/([a-zA-ZáéíóúüñÁÉÍÓÚÜÑ]+|[^a-zA-ZáéíóúüñÁÉÍÓÚÜÑ]+)/g);
             for (const token of tokens) {
               if (!token) continue;
@@ -1023,6 +969,7 @@
         container.appendChild(pDiv);
       }
     } else {
+      // 整句翻译模式（静态作品）
       for (const para of chapter.paragraphs) {
         const pDiv = document.createElement('div');
         pDiv.className = 'paragraph';
@@ -1042,17 +989,34 @@
     return container;
   }
 
-  // ============================================================
-  // 进度和状态管理
-  // ============================================================
+  // 加载所有动态作品
+  async function loadAllDynamicBooks() {
+    const promises = [];
+    for (const [bookName, config] of Object.entries(DYNAMIC_BOOKS_CONFIG)) {
+      if (config.isPaired) {
+        promises.push(loadPairedBook(bookName, config));
+      } else {
+        promises.push(loadSingleLanguageBook(bookName, config));
+      }
+    }
+    await Promise.all(promises);
+    
+    for (const [name, data] of Object.entries(dynamicBooksData)) {
+      NOVEL_DATA[name] = data;
+    }
+    renderBookShelf();
+    if (currentBookId !== "瞬息 / El instante" && NOVEL_DATA[currentBookId]) {
+      renderCurrentChapter();
+    }
+  }
+
+  // 进度管理
   let readingProgress = {};
   for (const [bookName, bookData] of Object.entries(STATIC_NOVEL_DATA)) {
-    if (!bookData.isDynamic) {
-      readingProgress[bookName] = {
-        completedChapters: new Array(bookData.chapters.length).fill(false),
-        totalChapters: bookData.chapters.length
-      };
-    }
+    readingProgress[bookName] = {
+      completedChapters: new Array(bookData.chapters.length).fill(false),
+      totalChapters: bookData.chapters.length
+    };
   }
 
   let currentBookId = "El Buscón (Capítulo 3)";
@@ -1096,7 +1060,8 @@
     
     const chapter = book.chapters[currentChapterIdx];
     const mode = book.mode || "sentence";
-    const newContainer = renderChapterWithMode(chapter, mode, currentBookId);
+    const hasRhetoric = book.hasRhetoric || false;
+    const newContainer = renderChapterWithMode(chapter, mode, currentBookId, hasRhetoric);
     readingContainer.innerHTML = '';
     while (newContainer.firstChild) readingContainer.appendChild(newContainer.firstChild);
     readingContainer.className = `reading-area ${currentFontClass} ${currentTextSize}`;
@@ -1120,7 +1085,7 @@
     if (!progress) return;
     if (progress.completedChapters[currentChapterIdx]) {
       readingStatusMsg.innerText = '📌 本章之前已经标记过啦！';
-      setTimeout(() => readingStatusMsg.innerText = '✨ 点击有修辞标注的句子查看赏析，点击其他单词查词', 1500);
+      setTimeout(() => readingStatusMsg.innerText = '✨ 点击单词查词 / 点击特定句子查看修辞赏析', 1500);
       return;
     }
     progress.completedChapters[currentChapterIdx] = true;
@@ -1128,7 +1093,7 @@
     markBtn.classList.add('completed');
     markBtn.innerHTML = '✅ 本章已完成';
     readingStatusMsg.innerText = '🎉 章节进度已更新！';
-    setTimeout(() => readingStatusMsg.innerText = '✨ 点击有修辞标注的句子查看赏析，点击其他单词查词', 2000);
+    setTimeout(() => readingStatusMsg.innerText = '✨ 点击单词查词 / 点击特定句子查看修辞赏析', 2000);
     updateGlobalProgress();
     renderBookShelf();
   }
@@ -1136,13 +1101,13 @@
   function prevChapter() {
     const book = NOVEL_DATA[currentBookId];
     if (book && currentChapterIdx > 0) { currentChapterIdx--; renderCurrentChapter(); }
-    else { readingStatusMsg.innerText = '已经是第一章'; setTimeout(() => readingStatusMsg.innerText = '✨ 点击有修辞标注的句子查看赏析，点击其他单词查词', 800); }
+    else { readingStatusMsg.innerText = '已经是第一章'; setTimeout(() => readingStatusMsg.innerText = '✨ 点击单词查词 / 点击特定句子查看修辞赏析', 800); }
   }
   
   function nextChapter() {
     const book = NOVEL_DATA[currentBookId];
     if (book && currentChapterIdx + 1 < book.chapters.length) { currentChapterIdx++; renderCurrentChapter(); }
-    else { readingStatusMsg.innerText = '🎯 已是最后一章'; setTimeout(() => readingStatusMsg.innerText = '✨ 点击有修辞标注的句子查看赏析，点击其他单词查词', 1500); }
+    else { readingStatusMsg.innerText = '🎯 已是最后一章'; setTimeout(() => readingStatusMsg.innerText = '✨ 点击单词查词 / 点击特定句子查看修辞赏析', 1500); }
   }
 
   function switchBook(bookName) {
@@ -1181,7 +1146,7 @@
       } catch(e) {}
     }
     const lastBook = localStorage.getItem('lectura_espe_last_book');
-    if (lastBook && (STATIC_NOVEL_DATA[lastBook] || dynamicBooksData[lastBook])) {
+    if (lastBook && (STATIC_NOVEL_DATA[lastBook] || DYNAMIC_BOOKS_CONFIG[lastBook])) {
       currentBookId = lastBook;
       const lastChap = parseInt(localStorage.getItem('lectura_espe_last_chapter'));
       if (!isNaN(lastChap)) currentChapterIdx = lastChap;
@@ -1265,16 +1230,15 @@
   
   loadProgressFromLocal();
   bookTitleSpan.innerText = currentBookId;
-  bookAuthorSpan.innerText = STATIC_NOVEL_DATA[currentBookId]?.author || dynamicBooksData[currentBookId]?.author || "Francisco de Quevedo";
+  bookAuthorSpan.innerText = STATIC_NOVEL_DATA[currentBookId]?.author || DYNAMIC_BOOKS_CONFIG[currentBookId]?.author || "Francisco de Quevedo";
   
-  (async () => {
-    await loadRhetoricData();
-    await loadAllDynamicBooks();
-    renderCurrentChapter();
-    renderBookShelf();
-    updateGlobalProgress();
-    updateVocabCountDisplay();
-  })();
+  await loadRhetoricData();
+  await loadAllDynamicBooks();
+  
+  renderCurrentChapter();
+  renderBookShelf();
+  updateGlobalProgress();
+  updateVocabCountDisplay();
   
   window.addEventListener('beforeunload', () => saveProgressToLocal());
 </script>
