@@ -458,7 +458,7 @@
 
 <script>
   // ============================================================
-  // 静态作品数据（完整保留：博尔赫斯、聂鲁达、洛尔迦、帕斯）
+  // 静态作品数据（完整保留，一字未删）
   // ============================================================
   const STATIC_NOVEL_DATA = {
     "El Buscón (Capítulo 3)": {
@@ -576,7 +576,7 @@
     }
   };
 
-  // ============================================================
+    // ============================================================
   // 修辞数据存储
   // ============================================================
   let rhetoricData = {};
@@ -961,21 +961,30 @@
   }
 
   // ============================================================
-  // 检查句子是否有修辞标注
+  // 检查句子是否有修辞标注（精确匹配句子级别）
   // ============================================================
-  function hasRhetoricForSentence(spanishText) {
-    const normalized = spanishText.trim().replace(/\s+/g, ' ');
+  function hasRhetoricForSentence(sentenceText) {
+    const normalized = sentenceText.trim().replace(/\s+/g, ' ');
     for (const [key, value] of Object.entries(rhetoricData)) {
       const normalizedKey = key.trim().replace(/\s+/g, ' ');
-      if (normalized === normalizedKey || normalized.includes(normalizedKey)) {
+      if (normalized === normalizedKey || normalized.includes(normalizedKey) || normalizedKey.includes(normalized)) {
         return value;
       }
     }
     return null;
   }
-  
+
   // ============================================================
-  // 渲染章节
+  // 将段落拆分为句子数组（用于修辞识别）
+  // ============================================================
+  function splitParagraphIntoSentences(paragraphText) {
+    // 按句号、问号、感叹号、分号、冒号拆分，保留标点
+    const sentences = paragraphText.split(/(?<=[.?!;:])\s+/g);
+    return sentences.filter(s => s.trim().length > 0);
+  }
+
+  // ============================================================
+  // 渲染章节（核心：句子级修辞识别）
   // ============================================================
   function renderChapterWithMode(chapter, mode, sourceBookName) {
     const container = document.createElement('div');
@@ -988,23 +997,57 @@
         
         for (const sent of para.sentences) {
           const text = sent.spanish;
-          const hasRhetoric = (sourceBookName === "El Buscón (Capítulo 3)") ? hasRhetoricForSentence(text) : null;
           
-          if (hasRhetoric) {
-            const rhetoricSpan = document.createElement('span');
-            rhetoricSpan.className = 'sentence';
-            // 无背景色标注，与普通句子完全一致
-            rhetoricSpan.style.borderRadius = '8px';
-            rhetoricSpan.style.padding = '2px 4px';
-            rhetoricSpan.style.cursor = 'pointer';
-            rhetoricSpan.textContent = text;
-            rhetoricSpan.addEventListener('click', (e) => {
-              e.stopPropagation();
-              const rect = rhetoricSpan.getBoundingClientRect();
-              showRhetoricTooltip(hasRhetoric.title, hasRhetoric.translation, hasRhetoric.analysis, rect);
-            });
-            pDiv.appendChild(rhetoricSpan);
+          // 对于《骗子外传》，按句子拆分后逐个判断修辞
+          if (sourceBookName === "El Buscón (Capítulo 3)" && rhetoricData && Object.keys(rhetoricData).length > 0) {
+            // 将段落拆分为多个句子
+            const sentences = splitParagraphIntoSentences(text);
+            
+            for (const sentence of sentences) {
+              const trimmedSentence = sentence.trim();
+              if (!trimmedSentence) continue;
+              
+              const rhetoricInfo = hasRhetoricForSentence(trimmedSentence);
+              
+              if (rhetoricInfo) {
+                // 有修辞的句子：整个句子作为可点击元素
+                const rhetoricSpan = document.createElement('span');
+                rhetoricSpan.className = 'sentence';
+                rhetoricSpan.style.borderRadius = '8px';
+                rhetoricSpan.style.padding = '2px 4px';
+                rhetoricSpan.style.cursor = 'pointer';
+                rhetoricSpan.textContent = trimmedSentence + ' ';
+                rhetoricSpan.addEventListener('click', (e) => {
+                  e.stopPropagation();
+                  const rect = rhetoricSpan.getBoundingClientRect();
+                  showRhetoricTooltip(rhetoricInfo.title, rhetoricInfo.translation, rhetoricInfo.analysis, rect);
+                });
+                pDiv.appendChild(rhetoricSpan);
+              } else {
+                // 无修辞的句子：拆分为单词，支持查词
+                const tokens = trimmedSentence.split(/([a-zA-ZáéíóúüñÁÉÍÓÚÜÑ]+|[^a-zA-ZáéíóúüñÁÉÍÓÚÜÑ]+)/g);
+                for (const token of tokens) {
+                  if (!token) continue;
+                  if (/[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ]/.test(token)) {
+                    const wordSpan = document.createElement('span');
+                    wordSpan.className = 'word';
+                    wordSpan.textContent = token;
+                    wordSpan.addEventListener('click', async (e) => {
+                      e.stopPropagation();
+                      const rect = wordSpan.getBoundingClientRect();
+                      const word = token.toLowerCase();
+                      const translations = await lookupWord(word);
+                      showWordTooltip(word, translations.length ? translations : ['未找到释义'], rect, trimmedSentence, sourceBookName);
+                    });
+                    pDiv.appendChild(wordSpan);
+                  } else {
+                    pDiv.appendChild(document.createTextNode(token));
+                  }
+                }
+              }
+            }
           } else {
+            // 非《骗子外传》的作品：保持原有逻辑
             const tokens = text.split(/([a-zA-ZáéíóúüñÁÉÍÓÚÜÑ]+|[^a-zA-ZáéíóúüñÁÉÍÓÚÜÑ]+)/g);
             for (const token of tokens) {
               if (!token) continue;
@@ -1029,6 +1072,7 @@
         container.appendChild(pDiv);
       }
     } else {
+      // 整句翻译模式（静态作品）
       for (const para of chapter.paragraphs) {
         const pDiv = document.createElement('div');
         pDiv.className = 'paragraph';
