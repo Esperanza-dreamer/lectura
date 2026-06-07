@@ -978,8 +978,8 @@
   // 将段落拆分为句子数组（用于修辞识别）
   // ============================================================
   function splitParagraphIntoSentences(paragraphText) {
-    // 按句号、问号、感叹号、分号、冒号拆分，保留标点
-    const sentences = paragraphText.split(/(?<=[.?!;:])\s+/g);
+    // 按句号、分号、感叹号、问号拆分，保留标点
+    const sentences = paragraphText.split(/(?<=[.;!?])\s+/);
     return sentences.filter(s => s.trim().length > 0);
   }
 
