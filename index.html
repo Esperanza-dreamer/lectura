@@ -425,7 +425,7 @@
       <button id="themeBlueBtn" class="theme-btn">💧 蓝</button>
       <button id="themeTerracottaBtn" class="theme-btn">🔥 橙</button>
       <span class="progress-badge" id="globalProgressBadge">📚 阅读进度 0%</span>
-      <button id="vocabBtn" class="chapter-btn" style="background:var(--accent); color:white; border:none;">📖 单词本 (<span id="vocabCount">0</span>)</button>
+      <button id="vocabBtn" class="chapter-btn" style="background: var(--accent); color: white; border: none;">📖 单词本 (<span id="vocabCount">0</span>)</button>
     </div>
   </div>
 
@@ -993,7 +993,7 @@
           if (hasRhetoric) {
             const rhetoricSpan = document.createElement('span');
             rhetoricSpan.className = 'sentence';
-            // 删除 backgroundColor 那一行
+            // 无背景色标注，与普通句子完全一致
             rhetoricSpan.style.borderRadius = '8px';
             rhetoricSpan.style.padding = '2px 4px';
             rhetoricSpan.style.cursor = 'pointer';
@@ -1203,6 +1203,15 @@
     if (savedSize && ['text-small', 'text-normal', 'text-large'].includes(savedSize)) {
       currentTextSize = savedSize;
     }
+    // 确保单词本按钮颜色与主题同步
+    setTimeout(() => {
+      const vocabBtn = document.getElementById('vocabBtn');
+      if (vocabBtn) {
+        const computedStyle = getComputedStyle(document.body);
+        const accentColor = computedStyle.getPropertyValue('--accent').trim();
+        if (accentColor) vocabBtn.style.background = accentColor;
+      }
+    }, 10);
   }
 
   function renderBookShelf() {
@@ -1258,10 +1267,12 @@
   function setTextSize(size) { currentTextSize = size; renderCurrentChapter(); saveProgressToLocal(); }
   function setTheme(themeName) {
     document.body.className = themeName === 'default' ? '' : `theme-${themeName}`;
-    // 刷新单词本按钮样式
+    // 同步单词本按钮颜色
     const vocabBtn = document.getElementById('vocabBtn');
     if (vocabBtn) {
-      vocabBtn.style.background = 'var(--accent)';
+      const computedStyle = getComputedStyle(document.body);
+      const accentColor = computedStyle.getPropertyValue('--accent').trim();
+      if (accentColor) vocabBtn.style.background = accentColor;
     }
     saveProgressToLocal();
   }
