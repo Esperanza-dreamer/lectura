@@ -5,19 +5,19 @@
     "translation": "我们在大斋期后的第一个星期日落入了活生生的饥饿的掌控之中，因为这样的惨状已不容任何夸张。",
     "analysis": "【修辞分析】\n• Personificación：不说“teníamos hambre”，而说“entramos en poder de la hambre viva”，饥饿仿佛一个有生命的压迫者。\n• Paradoja：“这样的惨状已不容任何夸张”使用了元修辞的手法，饥饿程度之极端，连夸张都无法描述——不过说出这句话本身也是在使用夸张。"
   },
-  "las barbas, descoloridas de miedo de la boca vecina, que, de pura hambre, parecía que amenazaba a comérselas.": {
+  "las barbas, descoloridas de miedo de la boca vecina, que, de pura hambre, parecía que amenazaba a comérselas;": {
     "hasRhetoric": true,
     "title": "Barbas temiendo a la boca",
     "translation": "胡子因害怕旁边的嘴巴而褪了色；那张嘴，出于纯粹的饥饿，看起来像是要把胡子吃掉。",
     "analysis": "【修辞分析】\n• Personificación + Hipérbole：胡子因害怕而褪色，害怕的是极度饥饿的嘴巴会将其吃掉。借助身体部分的拟人化将饥饿具象化并且夸大，嘴巴的饥饿、胡子的恐惧，也反映了人饥不择食的状态。"
   },
-  "el gaznate, largo como avestruz, con una nuez tan salida, que parecía se iba a buscar de comer, forzada de la necesidad.": {
+  "el gaznate, largo como avestruz, con una nuez tan salida, que parecía se iba a buscar de comer, forzada de la necesidad;": {
     "hasRhetoric": true,
     "title": "Nuez que busca de comer",
     "translation": "脖子长如鸵鸟，喉结如此突出，看起来像是被迫要自己去找吃的，是迫于需要。",
     "analysis": "【修辞分析】\n• Comparación zoológica：“长如鸵鸟”不是一个中性的比喻。鸵鸟是一种大而笨拙的鸟，往往与愚蠢和畸形相关联。\n• Personificación：喉结看起来像是自己要去找吃的，被当作有自己意志、被迫去获取食物的东西。如果Cabra自己的身体器官都极度饥饿——嘴巴要吃掉胡子，喉结要独自觅食，那么他的学生们面临的饥饿可想而知。"
   },
-  "Mirado de media abajo, parecía tenedor, o compás con dos piernas largas y flacas.": {
+  "Mirado de media abajo, parecía tenedor, o compás con dos piernas largas y flacas;": {
     "hasRhetoric": true,
     "title": "Cuerpo como tenedor o compás",
     "translation": "从腰部往下看，他像一把叉子或圆规，两条又长又瘦的腿。",
@@ -34,12 +34,6 @@
     "title": "Sotana milagrosa",
     "translation": "修士袍是奇迹般的——据一些人说——因为没人知道它是什么颜色的。",
     "analysis": "【修辞分析】\n• Ironía + Antífrasis：“milagrosa”本应用于描述圣物或神迹，却被用来描述一件破烂肮脏的袍子，这是一种反语（Antífrasis）和讽刺。"
-  },
-  "Unos viéndola tan sin pelo, la tenían por de cuero de rana; otros decían que era ilusión; desde cerca parecía negra y desde lejos entre azul.": {
-    "hasRhetoric": true,
-    "title": "El color ilusorio",
-    "translation": "有些人看到它那么秃，以为是青蛙皮做的；另一些人说那是幻觉；近看像是黑色，远看是发蓝的。",
-    "analysis": "【修辞分析】\n• Ironía continuada：对一件破烂袍子的颜色进行哲学式的讨论，讽刺了人们对表象的过度解读。"
   },
   "parecía, con los cabellos largos y la sotana mísera y corta, lacayuelo de la muerte.": {
     "hasRhetoric": true,
@@ -63,7 +57,7 @@
     "hasRhetoric": true,
     "title": "Garbanzo huérfano",
     "translation": "我注意到那些干瘪的手指焦虑地游向一个孤零零、漂浮在碗底的鹰嘴豆。",
-    "analysis": "【修辞分析】\n• Personificación + Metáfora：将鹰嘴豆拟人化为“孤儿”，如此稀少以至于每一粒都像孤儿一样孤苦伶仃；手指需要“游过”一片清汤寡水才能到达，饥饿将进食行为转变为游泳和营救行为。"
+    "analysis": "【修辞分析】\n• Personificación + Metáfora：将鹰嘴豆拟人化为“孤儿”，如此稀少以至于每一粒都像孤儿一样孤苦伶仃；手指需要“游过”一片清汤寡水才能到达。"
   },
   "y no carnero, sino un poco del nombre del maestro: cabra asada.": {
     "hasRhetoric": true,
