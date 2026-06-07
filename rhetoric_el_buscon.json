@@ -5,13 +5,13 @@
     "translation": "我们在大斋期后的第一个星期日落入了活生生的饥饿的掌控之中，因为这样的惨状已不容任何夸张。",
     "analysis": "【修辞分析】\n• Personificación：不说“teníamos hambre”，而说“entramos en poder de la hambre viva”，饥饿仿佛一个有生命的压迫者。\n• Paradoja：“这样的惨状已不容任何夸张”使用了元修辞的手法，饥饿程度之极端，连夸张都无法描述——不过说出这句话本身也是在使用夸张。"
   },
-  "las barbas, descoloridas de miedo de la boca vecina, que, de pura hambre, parecía que amenazaba a comérselas;": {
+  ";las barbas, descoloridas de miedo de la boca vecina, que, de pura hambre, parecía que amenazaba a comérselas;": {
     "hasRhetoric": true,
     "title": "Barbas temiendo a la boca",
     "translation": "胡子因害怕旁边的嘴巴而褪了色；那张嘴，出于纯粹的饥饿，看起来像是要把胡子吃掉。",
     "analysis": "【修辞分析】\n• Personificación + Hipérbole：胡子因害怕而褪色，害怕的是极度饥饿的嘴巴会将其吃掉。借助身体部分的拟人化将饥饿具象化并且夸大，嘴巴的饥饿、胡子的恐惧，也反映了人饥不择食的状态。"
   },
-  "el gaznate, largo como avestruz, con una nuez tan salida, que parecía se iba a buscar de comer, forzada de la necesidad;": {
+  ";el gaznate, largo como avestruz, con una nuez tan salida, que parecía se iba a buscar de comer, forzada de la necesidad;": {
     "hasRhetoric": true,
     "title": "Nuez que busca de comer",
     "translation": "脖子长如鸵鸟，喉结如此突出，看起来像是被迫要自己去找吃的，是迫于需要。",
@@ -23,7 +23,7 @@
     "translation": "从腰部往下看，他像一把叉子或圆规，两条又长又瘦的腿；他走路非常慢；他一动弹，骨头就响得像圣拉撒路的三合板。",
     "analysis": "【修辞分析】\n• Metáfora：“他像一把叉子或圆规”，将人的身体作物化比喻，体现Cabra腿瘦长干瘪；同时，叉子和圆规的金属质感也暗示Cabra性格冷漠刻薄。与鲁迅对杨二嫂的“圆规”比喻有异曲同工之妙。\n• Comparación + Referencia religiosa：圣拉撒路是麻风病人的主保圣人，他们用木板敲击以宣布到来。这个比较将Cabra的身体变为麻风病人的身体，将他视为令人厌恶、敬而远之的存在。"
   },
-  "La sotana, según decían algunos, era milagrosa, porque no se sabía de qué color era.Unos viéndola tan sin pelo, la tenían por de cuero de rana;otros decían que era ilusión;desde cerca parecía negra y desde lejos entre azul;": {
+  "La sotana, según decían algunos, era milagrosa, porque no se sabía de qué color era.\nUnos viéndola tan sin pelo, la tenían por de cuero de rana;\notros decían que era ilusión;desde cerca parecía negra y desde lejos entre azul;": {
     "hasRhetoric": true,
     "title": "Sotana milagrosa",
     "translation": "修士袍是奇迹般的——据一些人说——因为没人知道它是什么颜色的。有些人看到它那么秃，以为是青蛙皮做的；另一些人说那是幻觉；近看像是黑色，远看是发蓝的。",
