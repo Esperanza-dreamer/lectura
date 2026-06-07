@@ -978,30 +978,11 @@
   // 将段落拆分为句子数组（用于修辞识别）
   // ============================================================
   function splitParagraphIntoSentences(paragraphText) {
-    // 策略：先按句号、感叹号、问号拆分（这些是强分隔符）
-    // 分号只作为弱分隔符，需要谨慎处理
-    
-    const result = [];
-    
-    // 先按强分隔符拆分（句号、感叹号、问号）
-    let parts = paragraphText.split(/(?<=[.!?])\s+/);
-    
-    for (let part of parts) {
-      // 检查是否包含需要保持完整的分号连接句子
-      // 如果包含 ";si" 或 ";y" 或 ";que" 等连接词，保持为整体
-      if (part.includes(';si') || part.includes(';y') || part.includes(';que') || part.includes(';pero')) {
-        result.push(part);
-      } else {
-        // 正常情况，按分号再拆分
-        const subParts = part.split(/(?<=;)\s*/);
-        for (let sub of subParts) {
-          if (sub.trim().length > 0) result.push(sub.trim());
-        }
-      }
-    }
-  
-  return result.filter(s => s.trim().length > 0);
-}
+    // 简化版：只按句号、分号、感叹号、问号拆分，保留这些标点
+    // 注意：分号作为分隔符，但不影响匹配
+    const sentences = paragraphText.split(/(?<=[.;!?])\s*/);
+    return sentences.filter(s => s.trim().length > 0);
+  }
 
   // ============================================================
   // 渲染章节（核心：句子级修辞识别）
