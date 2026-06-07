@@ -254,8 +254,8 @@
       background: var(--accent-dark);
     }
     .tooltip-btn-added {
-      background: #4A6A5A;
-      opacity: 0.7;
+      background: var(--accent);
+      opacity: 0.6;
       cursor: default;
     }
     .paragraph {
@@ -394,6 +394,12 @@
     }
     .font-times {
       font-family: 'Times New Roman', Times, serif;
+    }
+    /* 单词本按钮主题色跟随 */
+    #vocabBtn {
+      background: var(--accent) !important;
+      color: white !important;
+      transition: background 0.2s;
     }
   </style>
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500&family=Cormorant+Garamond:wght@400;500&display=swap" rel="stylesheet">
