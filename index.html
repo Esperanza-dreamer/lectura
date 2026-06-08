@@ -395,7 +395,6 @@
     .font-times {
       font-family: 'Times New Roman', Times, serif;
     }
-    /* 单词本按钮主题色跟随 */
     #vocabBtn {
       background: var(--accent) !important;
       color: white !important;
@@ -467,6 +466,7 @@
       mode: "word",
       isDynamic: true,
       hasRhetoric: true,
+      rhetoricFile: "rhetoric_el_buscon.json",
       file: "el_buscon-capitulo3.txt"
     },
     "Lazarillo de Tormes (Tratado 2)": {
@@ -474,6 +474,8 @@
       type: "小说",
       mode: "word",
       isDynamic: true,
+      hasRhetoric: true,
+      rhetoricFile: "rhetoric_lazarillo.json",
       file: "lazarillo_de_tormes-tratado2.txt"
     },
     "Cien años de soledad": {
@@ -575,23 +577,36 @@
       }]
     }
   };
-
     // ============================================================
-  // 修辞数据存储
+  // 修辞数据存储（支持多本书）
   // ============================================================
   let rhetoricData = {};
   
-  async function loadRhetoricData() {
+  async function loadRhetoricDataForBook(bookName) {
+    const bookConfig = STATIC_NOVEL_DATA[bookName];
+    if (!bookConfig || !bookConfig.hasRhetoric) return;
+    
+    const rhetoricFile = bookConfig.rhetoricFile;
+    if (!rhetoricFile) return;
+    
     try {
-      const response = await fetch('rhetoric_el_buscon.json');
+      const response = await fetch(rhetoricFile);
       if (response.ok) {
-        rhetoricData = await response.json();
-        console.log('✅ 修辞数据加载成功，共', Object.keys(rhetoricData).length, '条');
+        rhetoricData[bookName] = await response.json();
+        console.log(`✅ 修辞数据加载成功: ${bookName}, 共 ${Object.keys(rhetoricData[bookName]).length} 条`);
       } else {
-        console.warn('⚠️ 修辞数据加载失败');
+        console.warn(`⚠️ 修辞数据加载失败: ${bookName}`);
       }
     } catch (error) {
-      console.warn('⚠️ 修辞数据加载异常:', error);
+      console.warn(`⚠️ 修辞数据加载异常: ${bookName}`, error);
+    }
+  }
+  
+  async function loadAllRhetoricData() {
+    for (const [bookName, config] of Object.entries(STATIC_NOVEL_DATA)) {
+      if (config.hasRhetoric) {
+        await loadRhetoricDataForBook(bookName);
+      }
     }
   }
 
@@ -961,16 +976,24 @@
   }
 
   // ============================================================
-  // 检查句子是否有修辞标注（精确匹配句子级别）
+  // 检查句子是否有修辞标注（支持多本书）
   // ============================================================
-  function hasRhetoricForSentence(sentenceText) {
-    const normalized = sentenceText.trim().replace(/\s+/g, ' ');
-    for (const [key, value] of Object.entries(rhetoricData)) {
-      const normalizedKey = key.trim().replace(/\s+/g, ' ');
-      if (normalized === normalizedKey || normalized.includes(normalizedKey) || normalizedKey.includes(normalized)) {
-        return value;
-      }
+  function hasRhetoricForSentence(sentenceText, sourceBookName) {
+    const bookRhetoric = rhetoricData[sourceBookName];
+    if (!bookRhetoric) return null;
+    
+    const trimmed = sentenceText.trim();
+    // 直接精确匹配
+    if (bookRhetoric[trimmed]) {
+      return bookRhetoric[trimmed];
     }
+    // 移除末尾空格后的匹配
+    const trimmedEnd = trimmed.replace(/\s+$/, '');
+    if (bookRhetoric[trimmedEnd]) {
+      return bookRhetoric[trimmedEnd];
+    }
+    // 输出调试信息（用于排查）
+    console.log(`[${sourceBookName}] 未匹配的句子:`, trimmed.substring(0, 80));
     return null;
   }
 
@@ -978,8 +1001,7 @@
   // 将段落拆分为句子数组（用于修辞识别）
   // ============================================================
   function splitParagraphIntoSentences(paragraphText) {
-    // 简化版：只按句号、分号、感叹号、问号拆分，保留这些标点
-    // 注意：分号作为分隔符，但不影响匹配
+    // 按句号、分号、感叹号、问号拆分，保留标点
     const sentences = paragraphText.split(/(?<=[.;!?])\s*/);
     return sentences.filter(s => s.trim().length > 0);
   }
@@ -999,8 +1021,8 @@
         for (const sent of para.sentences) {
           const text = sent.spanish;
           
-          // 对于《骗子外传》，按句子拆分后逐个判断修辞
-          if (sourceBookName === "El Buscón (Capítulo 3)" && rhetoricData && Object.keys(rhetoricData).length > 0) {
+          // 对于有修辞标注的作品，按句子拆分后逐个判断修辞
+          if (STATIC_NOVEL_DATA[sourceBookName]?.hasRhetoric && rhetoricData[sourceBookName] && Object.keys(rhetoricData[sourceBookName]).length > 0) {
             // 将段落拆分为多个句子
             const sentences = splitParagraphIntoSentences(text);
             
@@ -1008,7 +1030,7 @@
               const trimmedSentence = sentence.trim();
               if (!trimmedSentence) continue;
               
-              const rhetoricInfo = hasRhetoricForSentence(trimmedSentence);
+              const rhetoricInfo = hasRhetoricForSentence(trimmedSentence, sourceBookName);
               
               if (rhetoricInfo) {
                 // 有修辞的句子：整个句子作为可点击元素
@@ -1048,7 +1070,7 @@
               }
             }
           } else {
-            // 非《骗子外传》的作品：保持原有逻辑
+            // 没有修辞标注的作品：保持原有逻辑，拆分为单词查词
             const tokens = text.split(/([a-zA-ZáéíóúüñÁÉÍÓÚÜÑ]+|[^a-zA-ZáéíóúüñÁÉÍÓÚÜÑ]+)/g);
             for (const token of tokens) {
               if (!token) continue;
@@ -1338,7 +1360,7 @@
   bookAuthorSpan.innerText = STATIC_NOVEL_DATA[currentBookId]?.author || dynamicBooksData[currentBookId]?.author || "Francisco de Quevedo";
   
   (async () => {
-    await loadRhetoricData();
+    await loadAllRhetoricData();
     await loadAllDynamicBooks();
     renderCurrentChapter();
     renderBookShelf();
